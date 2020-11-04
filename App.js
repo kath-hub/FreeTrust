@@ -12,10 +12,10 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoadingComplete: false,
+      }
+    if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
 
-      //if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
-
-    }
+    
   }
 
  render() {
@@ -32,7 +32,7 @@ export default class App extends React.Component {
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-          <RootNavigation />
+          <SearchPage />
         </View>
       );
     }
