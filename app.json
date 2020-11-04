@@ -1,5 +1,5 @@
 {
-  "expo": {
+  "expo": { 
     "name": "FreeTrust",
     "slug": "FreeTrust",
     "version": "1.0.0",
@@ -20,6 +20,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.mobilepackage.freetrust",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
