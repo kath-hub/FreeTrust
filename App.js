@@ -6,6 +6,7 @@ import SearchPage from './pages/SearchPage'
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
 
+
 export default class App extends React.Component {
 
   constructor(props){
@@ -18,9 +19,8 @@ export default class App extends React.Component {
 
   render() {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+
+        <View style={styles.container}>                 
           <SearchPage />
         </View>
       );
