@@ -20,7 +20,7 @@ export default class SearchPage extends React.Component {
                     
           let freelancers = []
           docs.forEach(doc => {
-            freelancers.push(doc.data())
+        
           })
           this.setState({freelancers})
           console.log(freelancers)
