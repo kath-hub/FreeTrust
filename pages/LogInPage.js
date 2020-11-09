@@ -11,9 +11,9 @@ export default function LoginPage({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    // const onFooterLinkPress = () => {
-    //     navigation.navigate('Registration')
-    // }
+    const onFooterLinkPress = () => {
+        navigation.navigate('RegistrationPage')
+    }
 
     const onLoginPress = () => {
         firebase
@@ -32,7 +32,7 @@ export default function LoginPage({navigation}) {
                     }
                     const user = firestoreDocument.data()
 
-                    // navigation.navigate('Home', {user})
+                    navigation.navigate('Home');
                 })
                 .catch(error => {
                     alert(error)
@@ -74,9 +74,9 @@ export default function LoginPage({navigation}) {
                     onPress={() => onLoginPress()}>
                     <Text style={styles.buttonTitle}>Log in</Text>
                 </TouchableOpacity>
-                {/* <View style={styles.footerView}>
+                <View style={styles.footerView}>
                     <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
-                </View> */}
+                </View>
             </ScrollView>
         </View>
     )

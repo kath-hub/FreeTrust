@@ -10,7 +10,7 @@ export default StyleSheet.create({
     },
     logo: {
         flex: 1,
-        height: 120,
+        height: 90,
         width: 90,
         alignSelf: "center",
         margin: 30
@@ -21,6 +21,7 @@ export default StyleSheet.create({
         borderRadius: 5,
         overflow: 'hidden',
         backgroundColor: 'white',
+        alignSelf: "center",
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 20,
@@ -45,6 +46,7 @@ export default StyleSheet.create({
     footerView: {
         flex: 1,
         alignItems: "center",
+        justifyContent: 'center',
         marginTop: 20
     },
     footerText: {
