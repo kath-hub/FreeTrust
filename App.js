@@ -27,18 +27,12 @@ export default class App extends React.Component {
   render() {
       return (
 
-<<<<<<< HEAD
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="SearchPage" component={SearchPage} />
           <Stack.Screen name="ProfilePage" component={ProfilePage} />
         </Stack.Navigator>
       </NavigationContainer>
-=======
-        <View style={styles.container}>                 
-          <LoginPage />
-        </View>
->>>>>>> bc9ea205e29b1e632f5d4f485c33aebf0b883991
       );
   }
 }
