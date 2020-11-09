@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
-import ProfilePage from './ProfilePage.js';
 
 import * as firebase from 'firebase';
 

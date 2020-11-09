@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import RadioButton from '../Components/RadioButton'
 import styles from './RegistrationPageStyles';
 
+const firebase = require("firebase");
+require("firebase/firestore");
+import ApiKeys from '../constants/ApiKeys';
 
-
-
-
-export default function RegistrationScreen({navigation}) {
+export default function RegistrationPage({navigation}) {
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
     const [userType, setUserType] = useState(0)
@@ -20,7 +20,7 @@ export default function RegistrationScreen({navigation}) {
     
     const radioHandler = () => {
         if(freelancerCheck){
-            setFreelancerCheck(false); //for avoiding multiple checks at a time;
+            setFreelancerCheck(false); 
         }
         setUserType(0);
         setServiceSeekerCheck(true);
@@ -32,6 +32,11 @@ export default function RegistrationScreen({navigation}) {
         } 
         setUserType(1);
         setFreelancerCheck(true);
+    }
+
+
+    const onFooterLinkPress = () => {
+        navigation.navigate('LoginPage')
     }
 
     const onRegisterPress = () => {
@@ -84,6 +89,15 @@ export default function RegistrationScreen({navigation}) {
                         alert(error)
                     });
                 }
+
+                Alert.alert(
+                    'Registration Successful',
+                    'Log in',
+                    [
+                      { text: 'OK', onPress: () => navigation.navigate('Login', data) }
+                    ],
+                    { cancelable: false }
+                  );
             })
             .catch((error) => {
                 alert(error)
@@ -149,9 +163,9 @@ export default function RegistrationScreen({navigation}) {
                     onPress={() => onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
-                {/* <View style={styles.footerView}>
+                <View style={styles.footerView}>
                     <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
-                </View> */}
+                </View>
             </ScrollView>
         </View>
     )
