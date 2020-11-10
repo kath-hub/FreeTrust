@@ -76,13 +76,13 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName= "Home">
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
-
-        {/* <Stack.Screen name="SearchPage" component={SearchPage} /> */}
-        <Stack.Screen name="ProfilePage" component={ProfilePage} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="SearchPage" component={SearchPage} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        
 
         </Stack.Navigator>
       </NavigationContainer>

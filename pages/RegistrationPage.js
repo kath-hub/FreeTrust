@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View, ScrollView, Alert } from 'react-native'
 import RadioButton from '../Components/RadioButton'
 import styles from './RegistrationPageStyles';
@@ -7,55 +7,58 @@ const firebase = require("firebase");
 require("firebase/firestore");
 import ApiKeys from '../constants/ApiKeys';
 
-export default function RegistrationPage({navigation}) {
-    const [fullName, setFullName] = useState('')
-    const [email, setEmail] = useState('')
-    const [userType, setUserType] = useState(0)
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+export default class RegistrationPage extends Component {
 
-    const [serviceSeekerCheck, setServiceSeekerCheck] = useState(false);
-    const [freelancerCheck, setFreelancerCheck] = useState(false);
+    state = {
+        name:'',
+        email:'',
+        userType:0,
+        password:'',
+        confirmPassword:'',
+        serviceSeekerCheck:false,
+        freelancerCheck:false
+    }
+
 
     
-    const radioHandler = () => {
-        if(freelancerCheck){
-            setFreelancerCheck(false); 
+    radioHandler = () => {
+        if(this.state.freelancerCheck){
+            this.setState({freelancerCheck:false});
         }
-        setUserType(0);
-        setServiceSeekerCheck(true);
+        this.setState({userType:0});
+        this.setState({serviceSeekerCheck:true});
     }
         
-    const radioHandler2 = () => {
-        if(serviceSeekerCheck){
-            setServiceSeekerCheck(false);
+    radioHandler2 = () => {
+        if(this.state.serviceSeekerCheck){
+            this.setState({serviceSeekerCheck:false});
         } 
-        setUserType(1);
-        setFreelancerCheck(true);
+        this.setState({userType:1});
+        this.setState({freelancerCheck:true});
     }
 
 
-    const onFooterLinkPress = () => {
-        navigation.navigate('LoginPage')
+    onFooterLinkPress = () => {
+        this.props.navigation.navigate('LoginPage')
     }
 
-    const onRegisterPress = () => {
+    onRegisterPress = () => {
 
-        if (password !== confirmPassword) {
+        if (this.state.password !== this.state.confirmPassword) {
             alert("Passwords don't match.")
             return
         }
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
 
         firebase.auth()
-            .createUserWithEmailAndPassword(email, password)
+            .createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then( async (response) => {
                 const uid = response.user.uid
                 const data = {
                     id: uid,
-                    email,
-                    fullName,
-                    userType
+                    email:this.state.email,
+                    name:this.state.name,
+                    userType:this.state.userType
                 };
                 const usersRef = firebase.firestore().collection('users')
                 await usersRef
@@ -67,10 +70,10 @@ export default function RegistrationPage({navigation}) {
 
                 const profileData = {
                     id: uid,
-                    fullName,
+                    name:this.state.name,
                 };
 
-                if (userType === 0){
+                if (this.state.userType === 0){
                     const ssRef = firebase.firestore().collection('ss')
                     await ssRef
                     .doc(uid)
@@ -80,7 +83,7 @@ export default function RegistrationPage({navigation}) {
                     });
                 }
 
-                if (userType === 1){
+                if (this.state.userType === 1){
                     const freelancerRef = firebase.firestore().collection('freelancers')
                     await freelancerRef
                     .doc(uid)
@@ -94,7 +97,7 @@ export default function RegistrationPage({navigation}) {
                     'Registration Successful',
                     'Log in',
                     [
-                      { text: 'OK', onPress: () => navigation.navigate('Login', data) }
+                      { text: 'OK', onPress: () => this.props.navigation.navigate('LoginPage', data) }
                     ],
                     { cancelable: false }
                   );
@@ -104,8 +107,8 @@ export default function RegistrationPage({navigation}) {
         });
     }
 
-
-    return (
+    render(){
+        return (
         <View style={styles.container}>
             <ScrollView style={{ flex: 1, width: '100%' }}>
                 <Image
@@ -114,10 +117,10 @@ export default function RegistrationPage({navigation}) {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='Full Name'
+                    placeholder='Name'
                     placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setFullName(text)}
-                    value={fullName}
+                    onChangeText={(text) => this.setState({name:text})}
+                    value={this.state.name}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
@@ -125,17 +128,17 @@ export default function RegistrationPage({navigation}) {
                     style={styles.input}
                     placeholder='E-mail'
                     placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setEmail(text)}
-                    value={email}
+                    onChangeText={(text) => this.setState({email:text})}
+                    value={this.state.email}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
 
                 <View style={{ height: 48, flexDirection: 'row' , alignItems: "center", justifyContent: 'center'}}>
-                    <Text style={{ size: 16, color: "#aaaaaa"}}>Service Seeker:</Text>
-                    <RadioButton checked={serviceSeekerCheck} onPress={radioHandler}/>
-                    <Text style={{ size: 16, color: "#aaaaaa"}}>Freelancer:</Text>
-                    <RadioButton checked={freelancerCheck} onPress={radioHandler2}/>
+                    <Text style={{ fontSize: 16, color: "#aaaaaa"}}>Service Seeker:</Text>
+                    <RadioButton checked={this.state.serviceSeekerCheck} onPress={this.radioHandler}/>
+                    <Text style={{ fontSize: 16, color: "#aaaaaa"}}>Freelancer:</Text>
+                    <RadioButton checked={this.state.freelancerCheck} onPress={this.radioHandler2}/>
                 </View>
 
                 <TextInput
@@ -143,8 +146,8 @@ export default function RegistrationPage({navigation}) {
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Password'
-                    onChangeText={(text) => setPassword(text)}
-                    value={password}
+                    onChangeText={(text) => this.setState({password:text})}
+                    value={this.state.password}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
@@ -153,20 +156,22 @@ export default function RegistrationPage({navigation}) {
                     placeholderTextColor="#aaaaaa"
                     secureTextEntry
                     placeholder='Confirm Password'
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    value={confirmPassword}
+                    onChangeText={(text) => this.setState({confirmPassword:text})}
+                    value={this.state.confirmPassword}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => onRegisterPress()}>
+                    onPress={() => this.onRegisterPress()}>
                     <Text style={styles.buttonTitle}>Create account</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Already got an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
+                    <Text style={styles.footerText}>Already got an account? <Text onPress={this.onFooterLinkPress} style={styles.footerLink}>Log in</Text></Text>
                 </View>
             </ScrollView>
         </View>
     )
+    }
+    
 }
