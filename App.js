@@ -3,10 +3,14 @@ import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import ProfilePage from './pages/ProfilePage'
 import PersonalProfilePage from './pages/PersonalProfilePage'
 import SearchPage from './pages/SearchPage'
 import RegistrationPage from './pages/RegistrationPage'
+import EditProfile from './pages/EditProfile/EditProfile'
+
+
 import LoginPage from './pages/LoginPage'
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
@@ -76,12 +80,13 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName= "Home">
+        <Stack.Navigator initialRouteName= "SearchPage">
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="SearchPage" component={SearchPage} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
         
 

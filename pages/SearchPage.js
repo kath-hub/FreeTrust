@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 import { TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import ProfilePage from './ProfilePage'
-import StarRatings from 'react-star-ratings';
+import EditProfile from './EditProfile/EditProfile'
+import StarRating from 'react-native-star-rating';
+
+
 
 
 import * as firebase from 'firebase';
@@ -44,8 +47,7 @@ export default class SearchPage extends React.Component {
   }
 
   onPress (item) {
-    console.log(item.id);
-    this.props.navigation.navigate('ProfilePage',{item})
+    this.props.navigation.navigate('EditProfile',{item})
   };
 
  render() {
@@ -56,13 +58,18 @@ export default class SearchPage extends React.Component {
     const list = []
   
     locations.forEach((location) => {
-      list.push(<li>{location}</li>)
+      
+      if (location=="Central and Western"){
+        list.push(<Text style={styles.locations}>Central and</Text>)
+        list.push(<Text style={styles.locations}>Western</Text>)
+      }
+      else{list.push(<Text style={styles.locations}>{location}</Text>)}
     })
   
     return (
-      <div>
+      <View>
         {list}
-      </div>
+      </View>
     )
   }
  
@@ -78,16 +85,15 @@ export default class SearchPage extends React.Component {
           <View style={styles.itemright}> 
           
            {/* <Text style={styles.bio}>{item.data().bio}</Text> */}
-          <Text style={{fontSize:15,marginVertical: 2,}}>Average Rating:</Text>
+          <Text style={{fontSize:20}}>Average Rating:</Text>
 
-          <StarRatings 
+          <StarRating 
+          disabled={true}
           rating={item.data().averageRating}
-          starRatedColor="orange"
           numberOfStars={5}
           name='rating'
-          starDimension='25'
-          starSpacing='0'
-          marginVertical= '2'
+          starSize={22}
+          marginVertical= '5'
           />
           <Text style={{fontSize:15,marginVertical: 2,}}>+({item.data().reviews.length})</Text>
           </View>
@@ -122,14 +128,14 @@ const styles = StyleSheet.create({
     
     //alignItems: 'center',
     //justifyContent: 'center',
-    padding: 16,
+    padding: 12,
   },
 
   rowCellStyle:{
 
     flexDirection: 'row',
-    marginRight:40,
-    marginLeft:40,
+    //marginRight:40,
+    //marginLeft:40,
     marginTop:20,
     //paddingTop:20,
     //paddingBottom:20,
@@ -143,42 +149,43 @@ const styles = StyleSheet.create({
   itemleft: { 
     //flexDirection: "row",
     //alignItems: 'center',
-    height:120,
+    //height:120,
     width:'33%',
     //justifyContent: "space-between",
     backgroundColor: '#788eec',
     padding: 12,
-    marginVertical: 2,
+    //marginVertical: 2,
     //marginHorizontal: 16,
   },
   itemmiddle: { 
+    flexDirection: "row",
     //flexDirection: "column",
-    //alignItems: 'center',
-    height:120,
-    width:'33%',
+    //alignItems: 'flex-start',
+    //height:120,
+    width:'38%',
     //justifyContent: "space-between",
     backgroundColor: '#788eec',
-    padding: 12,
-    marginVertical: 2,
+    marginVertical: 12,
     //marginHorizontal: 16,
+    //flexWrap: 'wrap',
+
   },
   itemright: { 
     //flexDirection: "row",
-    alignItems: 'left',
+    alignItems: 'flex-start',
     //justifyContent: "space-between",
-    height:120,
+    //height:120,
     width:'33%',
     backgroundColor: '#788eec',
-    padding: 20,
-    marginVertical: 2,
+    marginVertical: 12,
     //marginHorizontal: 16,
   },
   name: {
-    fontSize: 32,    
+    fontSize: 22,    
   },
   freelancerType: {
     marginVertical: 2,
-    fontSize: 20,
+    fontSize: 15,
     fontStyle: "italic",
     color: "#52527a"
   },
@@ -188,11 +195,12 @@ const styles = StyleSheet.create({
   },
 
   locations:{
-    flexDirection: "column",
-    fontSize: 30,
+    fontSize: 20,
+    flex: 1, 
+    flexWrap: 'wrap'
   },
 
   bio: {
-    fontSize: 30,
+    fontSize: 22,
   },
 });
