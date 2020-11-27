@@ -1,24 +1,82 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView} from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import Carousel from './Carousel';
+import ContactInfo from './ContactInfo';
+import ReviewList from './ReviewList';
 
+const images = [
+  {
+    title: 'first',
+   url:'https://images.unsplash.com/photo-1567226475328-9d6baaf565cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
+   description: 'Silent Waters in the mountains in midst of Himilayas',
+   id: 1
+  },
+  {
+    title: 'second',
+    url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
+    description:
+      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
+      id: 2
+  },
+
+  // {
+  //   title: 'third',
+  //   url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
+  //   description:
+  //     'Red fort in India New Delhi is a magnificient masterpeiece of humans',
+  //     id: 3
+  // }
+ ]
+
+ const reviews = [
+
+  {creater: "Amy", comment: "bad", createDate: "2020-09-11", rating: 2, id: 1},
+  {creater: "Janice", comment: "bad", createDate: "2020-09-11", rating: 2, id: 2},
+  {creater: "Ada", comment: "bad", createDate: "2020-09-11", rating: 2, id: 3},
+  {creater: "Karen", comment: "bad", createDate: "2020-09-11", rating: 2, id: 4},
+  {creater: "Bella", comment: "bad", createDate: "2020-09-11", rating: 2, id: 5},
+
+ ]
 
 const FirstRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: Colors.white }]}>
       <Text style={styles.detailText}>Introduction</Text>
       <Text style={styles.subDetailText}>{props.profile}</Text>
+      <Text style={styles.detailText}>Portfolio Gallery</Text>
+      <View>
+            <Carousel data={images} />
+          </View>
 
+      <Text style={styles.detailText}>Credentials </Text>
+      <View>
+            <Carousel data={images} />
+          </View>
 
     </View>
 );
 
 const SecondRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+  <View style={[styles.scene, { backgroundColor: '#FFF' }]}>
+    <ReviewList data={reviews} />
+  </View>
 );
 
 const ThirdRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+    <View style={[styles.scene, { backgroundColor: '#FFF' }]}>
+        <ContactInfo />
+      </View>
   );
+
+
+
+const renderTabBar = props => (
+  <TabBar
+    {...props}
+    indicatorStyle={{ backgroundColor: 'white' }}
+    style={{ backgroundColor: '#788eec' }}
+  />
+);
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -54,6 +112,7 @@ export default function ProfileTabView(props) {
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
+      renderTabBar={renderTabBar}
       onIndexChange={setIndex}
       initialLayout={initialLayout}
       style={styles.container}
@@ -94,7 +153,7 @@ const styles = StyleSheet.create({
   detailText: {
     color: Colors.black,
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: '800',
     letterSpacing: 0.5,
     marginHorizontal: 20,
     marginVertical: 20,
