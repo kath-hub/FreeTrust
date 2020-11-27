@@ -5,6 +5,7 @@ import RadioButton from '../Components/RadioButton'
 const firebase = require("firebase");
 require("firebase/firestore");
 import ApiKeys from '../constants/ApiKeys';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default class RegistrationPage extends Component {
 
@@ -67,12 +68,19 @@ export default class RegistrationPage extends Component {
                         alert(error)
                     });
 
-                const profileData = {
+                var profileData = {
                     id: uid,
                     name:this.state.name,
                 };
 
                 if (this.state.userType === 0){
+                    profileData["profilePicture"] = "";
+                    profileData["phoneNumber"] = "";
+                    profileData["reviews"] = [];
+                    profileData["bio"] = "";
+                    profileData["introduction"] = "";
+                    profileData["credentials"] = [];
+                    profileData["averageRating"] = 0.0;
                     const ssRef = firebase.firestore().collection('ss')
                     await ssRef
                     .doc(uid)
@@ -83,6 +91,21 @@ export default class RegistrationPage extends Component {
                 }
 
                 if (this.state.userType === 1){
+
+                    profileData["freelancerType"] = "";
+                    profileData["profilePicture"] = "";
+                    profileData["phoneNumber"] = "";
+                    profileData["reviews"] = [];
+                    profileData["bio"] = "";
+                    profileData["introduction"] = "";
+                    profileData["credentials"] = [];
+                    profileData["averageRating"] = 0.0;
+                    profileData["portfolioGallery"] = [];
+                    profileData["locations"] = [];
+                    profileData["serviceFee"] = "";
+
+
+
                     const freelancerRef = firebase.firestore().collection('freelancers')
                     await freelancerRef
                     .doc(uid)
@@ -92,14 +115,16 @@ export default class RegistrationPage extends Component {
                     });
                 }
 
-                Alert.alert(
-                    'Registration Successful',
-                    'Log in',
-                    [
-                      { text: 'OK', onPress: () => this.props.navigation.navigate('LoginPage', data) }
-                    ],
-                    { cancelable: false }
-                  );
+                this.props.navigation.navigate('LoginPage')
+
+                // Alert.alert(
+                //     'Registration Successful',
+                //     'Log in',
+                //     [
+                //       { text: 'OK', onPress: () => this.props.navigation.navigate('LoginPage', data) }
+                //     ],
+                //     { cancelable: false }
+                //   );
             })
             .catch((error) => {
                 alert(error)
