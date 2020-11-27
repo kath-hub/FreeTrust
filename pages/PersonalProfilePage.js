@@ -9,38 +9,14 @@ import {
   View,
   Dimensions
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'
+import StarRating from 'react-native-star-rating';
 import PropTypes from 'prop-types';
 const firebase = require("firebase");
 require("firebase/firestore");
 import ApiKeys from '../constants/ApiKeys';
+import EditProfile from './EditProfile/EditProfile'
 
-import ProfileTabView from '../Components/ProfileTabView'
-import Carousel from '../Components/Carousel'
-
-const images = [
-  {
-    title: 'first',
-   url:'https://images.unsplash.com/photo-1567226475328-9d6baaf565cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
-   description: 'Silent Waters in the mountains in midst of Himilayas',
-   id: 1
-  },
-  {
-    title: 'second',
-    url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
-    description:
-      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
-      id: 2
-  },
-
-  {
-    title: 'third',
-    url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
-    description:
-      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
-      id: 3
-  }
- ]
+import ProfileTabView from '../Components/FreelancerProfileTabView'
 
 class PersonalProfile extends Component {
 
@@ -48,17 +24,9 @@ class PersonalProfile extends Component {
     containerStyle: {},
   }
 
-
-  renderDescription = () => {
-    return (
-      <View>
-        <Text style={styles.name}>{this.props.name}</Text>
-        <Text style={styles.descriptionText}>{this.props.profileData["bio"]}</Text>
-      </View>
-    )
+  onEditPress = (item) => {
+    this.props.navigation.navigate('EditProfile',{item})
   }
-
-
 
   renderContactHeader = () => {
     return (
@@ -74,6 +42,30 @@ class PersonalProfile extends Component {
             <View style={styles.userBioRow}>
               <Text style={styles.userBioText}>{this.props.profileData["bio"]}</Text>
             </View>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
+                    <View>
+                        <Text style={styles.ratingText}>Average Rating: </Text>
+                    </View>
+                    
+                    <View style={{flex: 0.5}}>
+                        <StarRating 
+                            disabled={true}
+                            rating={this.props.profileData["averageRating"]}
+                            numberOfStars={5}
+                            fullStarColor='#edca79'
+                            emptyStarColor='#E5E5EA'
+                            name='rating'
+                            starSize={22}
+                            marginVertical= '5'
+                            />
+                        </View>
+                </View>
+                <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.onEditPress(this.props.profileData)}>
+                        <Text style={styles.buttonTitle}>edit</Text>
+                    </TouchableOpacity>
+                
             </View>
         
       </View>
@@ -97,7 +89,7 @@ class PersonalProfile extends Component {
 class PersonalProfilePage extends Component {
 
   state = {
-    uid: "",
+    id: "",
     name: "",
     email: "",
     userType: -1,
@@ -114,7 +106,7 @@ class PersonalProfilePage extends Component {
 
     if (user) {
       // User is signed in.
-      this.state.uid = user.uid
+      this.state.id = user.uid
       this.state.email = user.email
 
     } else {
@@ -123,7 +115,7 @@ class PersonalProfilePage extends Component {
   }
 
   componentDidMount(){
-    const userDocument  = firebase.firestore().collection("users").where("id", '==', this.state.uid)
+    const userDocument  = firebase.firestore().collection("users").where("id", '==', this.state.id)
     .get()
     .then(querySnapshot => {
       if (!querySnapshot.empty){
@@ -150,7 +142,7 @@ class PersonalProfilePage extends Component {
           if(!querySnapshot.empty) {
             console.log("freelancer get")
             var profileData = querySnapshot.docs[0].data()
-            profileData.profilePicture = "https://i.imgur.com/X64evcq.jpg"
+            // profileData.profilePicture = "https://i.imgur.com/X64evcq.jpg"
             this.setState({profileData:profileData})
             // console.log(profileData);
             
@@ -169,16 +161,17 @@ class PersonalProfilePage extends Component {
   render(){
 
   console.log(this.state);
-  return <PersonalProfile {...productData} {...this.props}/>}
+  return <PersonalProfile {...this.state} {...this.props}/>}
 }
 
 export default PersonalProfilePage
 
 const productData = {
-  name: "Jennis BNK48",
-  username: "Jennis_BNK48",
+  name: "Jennis",
+  username: "Jennis",
   profileData: {
     bio: "Singer",
+    id: "DCOHW5bXm7MYfxxeFAltOmBl8DG2",
     title: "338 Spear St #26G",
     address: "San Francisco, CA 94105",
     phone: "12345678",
@@ -265,7 +258,7 @@ const styles = StyleSheet.create({
   },
   userBioText: {
     color: 'gray',
-    fontSize: 13.5,
+    fontSize: 14,
     textAlign: 'center',
   },
   userImage: {
@@ -289,4 +282,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 12,
   },
+
+  ratingText: {
+    color: 'gray',
+    fontSize: 14,
+    marginBottom: 5,
+    paddingLeft: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0.8, height: 0.8 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+    elevation: 5
+},
+
+button: {
+  backgroundColor: '#E1E1E1',
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 20,
+  height: 20,
+  width: 40,
+  borderRadius: 5,
+  alignItems: "center",
+  justifyContent: 'center'
+},
+buttonTitle: {
+  color: 'gray',
+  fontSize: 16,
+  fontWeight: "bold"
+},
 })
