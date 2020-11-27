@@ -1,13 +1,45 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView} from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
+import Carousel from './Carousel';
 
+const images = [
+  {
+    title: 'first',
+   url:'https://images.unsplash.com/photo-1567226475328-9d6baaf565cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
+   description: 'Silent Waters in the mountains in midst of Himilayas',
+   id: 1
+  },
+  {
+    title: 'second',
+    url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
+    description:
+      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
+      id: 2
+  },
+
+  {
+    title: 'third',
+    url:'https://images.unsplash.com/photo-1455620611406-966ca6889d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1130&q=80',
+    description:
+      'Red fort in India New Delhi is a magnificient masterpeiece of humans',
+      id: 3
+  }
+ ]
 
 const FirstRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: Colors.white }]}>
       <Text style={styles.detailText}>Introduction</Text>
       <Text style={styles.subDetailText}>{props.profile}</Text>
+      <Text style={styles.detailText}>Portfolio Gallery</Text>
+      <View>
+            <Carousel data={images} />
+          </View>
 
+      <Text style={styles.detailText}>Credentials </Text>
+      <View>
+            <Carousel data={images} />
+          </View>
 
     </View>
 );
@@ -94,7 +126,7 @@ const styles = StyleSheet.create({
   detailText: {
     color: Colors.black,
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: '800',
     letterSpacing: 0.5,
     marginHorizontal: 20,
     marginVertical: 20,
