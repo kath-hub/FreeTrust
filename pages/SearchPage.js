@@ -88,6 +88,7 @@ export default class SearchPage extends React.Component {
           <Text style={{fontSize:20}}>Average Rating:</Text>
 
           <StarRating 
+          disabled={true}
           rating={item.data().averageRating}
           numberOfStars={5}
           name='rating'

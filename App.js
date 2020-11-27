@@ -57,7 +57,7 @@ class Home extends React.Component {
       showLabel: false
     }}>
       <Tab.Screen name="SearchPage" component={SearchPage} />
-      <Tab.Screen name="PersonalProfilePage" component={PersonalProfilePage} />
+      <Tab.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
 
     </Tab.Navigator>
     );
@@ -80,13 +80,14 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName= "Home">
+        <Stack.Navigator initialRouteName= "SearchPage">
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="SearchPage" component={SearchPage} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
         
 
         </Stack.Navigator>

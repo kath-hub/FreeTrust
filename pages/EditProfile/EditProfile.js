@@ -1,8 +1,15 @@
 import React from 'react';
-import {  ScrollView, TextInput, TouchableWithoutFeedback,TouchableOpacity, Alert, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, TextInput, Image, TouchableHighlight ,TouchableOpacity, Alert, StyleSheet, Text, View } from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker'
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 
 import * as firebase from 'firebase';
+
+
 import SearchPage from '../ProfilePage';
+
+
 
 export default class EditProfile extends React.Component {
 
@@ -14,12 +21,14 @@ export default class EditProfile extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+                  id:"",
+                  profilePicture:"",
                   name:"",
                   freelancerType:"",
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  introduction:"",
+                  selfIntro:"",
                   credentials:""
                 }
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
@@ -27,29 +36,42 @@ export default class EditProfile extends React.Component {
         firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).onSnapshot(doc=>{
                   
 
-        this.setState({
-          name:doc.data().name,
-          freelancerType:doc.data().freelancerType,
-          locations:doc.data().locations,
-          serviceFee:doc.data().serviceFee,
-          bio:doc.data().bio,
-          introduction:doc.data().introduction,
-          credentials:doc.data().credentials,      
-        
-        })
-        
+          this.setState({
+            id:doc.id,
+            name:doc.data().name,
+            freelancerType:doc.data().freelancerType,
+            locations:doc.data().locations,
+            serviceFee:doc.data().serviceFee,
+            bio:doc.data().bio,
+            selfIntro:doc.data().selfIntro,
+            credentials:doc.data().credentials
+                            
+          })
+
   
-          }
-        )
+        })
 
-      }
+        firebase
+          .storage()
+          .ref()
+          .child(this.props.route.params.item.id+'_dp')
+          .getDownloadURL()
+          .then((url) => {
+            //from url you can fetched the uploaded image easily
+            this.setState({profilePicture: url});
+          })
+          .catch((e) => console.log('dp not uploaded ', e));
+          
 
+        
+    }
 
  
     componentDidMount(){
       
-      
 
+      
+      
 
         
     }
@@ -60,14 +82,17 @@ export default class EditProfile extends React.Component {
         
   
           
-      
+    
 
 saveOnPress(){
   var ref = firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id);
   ref.update(
     {
       serviceFee:this.state.serviceFee,
-      locations:this.state.locations
+      locations:this.state.locations,
+      bio:this.state.bio,
+      freelancerType:this.state.freelancerType,
+      introduction:this.state.introduction,
     }
       );
   this.props.navigation.navigate(SearchPage);
@@ -97,27 +122,168 @@ locationsOnPress (loc){
 }
 
 locButtonStat(loc){
-        if (this.state.locations.length>=4){
-          if (this.state.locations.indexOf(loc)>-1){
-            return false
-          }
-          return true
+  if (this.state.locations.length>=4){
+    if (this.state.locations.indexOf(loc)>-1){
+      return false;
+    }
+    return true;
+  }
+  return false;
+}
+
+
+pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    
+
+    if (!result.cancelled) {
+      this.setState({profilePicture:result.uri});
+
+      var name=this.state.id;
+
+      firebase.storage()
+      .ref(name)
+      .putFile(this.state.profilePicture)
+      .then((snapshot) => {
+        //You can check the image is now uploaded in the storage bucket
+        console.log(` has been successfully uploaded.`);
+      })
+      .catch((e) => console.log('uploading image error => ', e));
         }
-        return false;
+
+    
+  };
+    
+
+
+  _pickImage = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    this._handleImagePicked(pickerResult);
+  };
+
+  _handleImagePicked = async pickerResult => {
+    try {
+      this.setState({ uploading: true });
+
+      if (!pickerResult.cancelled) {
+        const uploadUrl = await this.uploadImageAsync(pickerResult.uri);
+        this.setState({ profilePicture: uploadUrl });
       }
+    } catch (e) {
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    } 
+  };
+
+  uploadImageAsync = async (uri)=> {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+
+  
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(this.state.id+'_dp');
+    const snapshot = await ref.put(blob);
+  
+    blob.close();
+
+    
+    return await snapshot.ref.getDownloadURL();
+  }
 
  render() {
 
-  
 
-      
-
+    
 
      return (  
 
       <ScrollView style={{ backgroundColor: 'white' }}>
+
+
+        
+
+          <TouchableHighlight style={{overflow:'hidden',borderRadius:50,alignSelf: 'center'}} onPress={this._pickImage}>
+
+          <Image 
+          style={styles.tinyLogo}          
+          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../../assets/blankdp.jpg')}
+          />
+
+          
+          </TouchableHighlight>
+
+        <Text style={{alignSelf: 'center', fontSize: 25}}>{this.state.name}</Text>
+
+
+        <View style={{flexDirection:"column", alignItems: 'center'}}>
+        <DropDownPicker
+         placeholder="Freelance Type: "
+          items={[
+              {label: 'Emcee', value: 'Emcee'},
+              {label: 'Fitness Coach', value: 'Fitness Coach'},
+              {label: 'Graphic Designer', value: 'Graphic Designer'},
+              {label: 'Magician', value: 'Magician'},
+              {label: 'Makeup Artist', value: 'Makeup Artist'},
+              {label: 'Photographer', value: 'Photographer'},
+              {label: 'Translator', value: 'Translator'},
+              {label: 'Video Editor', value: 'Video Editor'},
+              {label: 'Web Developer', value: 'Web Developer'},
+              
+          ]}
+          defaultValue={this.state.freelancerType}
+          containerStyle={{height: 40, width:150,alignItems: 'center'}}
+          onChangeItem={item => this.setState({
+            freelancerType: item.value
+          })}
+        />
+        </View>
+
+
         <View style={styles.container}>
-            <Text style={{marginLeft: 20,}}>{`Service Fee:`}</Text>
+            <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
+              <Text style={{marginLeft: 20, fontSize:20}}>{`Profile Highlight:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15}}>{`(This will appear\n on the search page)`}</Text>
+            </View>
+            
+            <TextInput
+
+                    style={styles.input}
+                    placeholder='Profile Highlight'
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => this.setState({bio:text})}
+                    value={this.state.bio}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+            
+        </View>
+
+
+        <View style={styles.container}>
+            <Text style={{marginLeft: 20, fontSize:20}}>{`Service Fee:`}</Text>
             <TextInput
 
                     style={styles.input}
@@ -125,6 +291,25 @@ locButtonStat(loc){
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => this.setState({serviceFee:text})}
                     value={this.state.serviceFee}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+            
+        </View>
+
+        <View style={styles.container,{flexDirection:"column"}}>
+            <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
+              <Text style={{marginLeft: 20, fontSize:20}}>{`Detailed Self Introduction:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15}}>{`(This will appear on your profile page)`}</Text>
+            </View>
+            
+            <TextInput
+
+                    style={styles.input,{marginLeft:20,fontSize:20}}
+                    placeholder={`Clients will see your self introduction\nwhen they have clicked into your profile`}
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => this.setState({introduction:text})}
+                    value={this.state.introduction}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
@@ -188,8 +373,8 @@ locButtonStat(loc){
 
 
         
-            <View>
-              <TouchableOpacity  style={{backgroundColor:'#641'}}  onPress={()=>this.saveOnPress()}><Text style={{fontSize: 50}}>Save</Text></TouchableOpacity >
+            <View style={{alignItems:'center'}}>
+              <TouchableOpacity  style={{width:100,borderRadius:50,backgroundColor:'#17E0FF'}}  onPress={()=>this.saveOnPress()}><Text style={{alignSelf: 'center',fontSize: 25}}>Save</Text></TouchableOpacity >
             </View>
       </ScrollView>
 
@@ -200,6 +385,8 @@ locButtonStat(loc){
 
 }
 
+
+
 const styles = StyleSheet.create({
 
   container: {
@@ -208,7 +395,15 @@ const styles = StyleSheet.create({
     alignItems: 'center'
 },
 
+  tinyLogo: {
+    width: 100,
+    height: 100
+    
+  },
+
+
   input: {
+    fontSize:20,
     height: 48,
     width: '70%',
     borderRadius: 5,
@@ -224,10 +419,6 @@ const styles = StyleSheet.create({
 
   
 
-
-  name: {
-    fontSize: 32,    
-  },
 
 
 });
