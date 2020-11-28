@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
     renderPhone = () => (
         <ContactPhoneRow
-            number={"12345678"}
+            number={this.props.phone}
             onPressTel={this.onPressTel}
           />
           
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
     renderEmail = () => (
         <ContactEmailRow
-            email={"abc@abc.com"}
+            email={this.props.email}
             onPressEmail={this.onPressEmail}
           />
     )

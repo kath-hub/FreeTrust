@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Dimensions, FlatList, Animated } from 'react-native'
-import ReviewItem from './ReviewItem'
+import JobItem from './JobItem'
 
 
 const { width, heigth } = Dimensions.get('window')
 
-const ReviewList = ({ data }) => {
+const JobList = ({ data }) => {
     const [dataList, setDataList] = useState(data);
 
     useEffect(()=> {
@@ -19,7 +19,7 @@ const ReviewList = ({ data }) => {
             data={data} 
             snapToAlignment="center"
             renderItem={({ item }) => {
-             return <ReviewItem item={item}/>
+             return <JobItem item={item}/>
             }}
         />
         )
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
       },
   });
 
-  export default ReviewList;
+  export default JobList;

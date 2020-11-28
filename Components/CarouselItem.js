@@ -61,6 +61,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 3,
         elevation: 5
+    },
+
+    itemNull: {
+        color: 'gray',
+        fontSize: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0.8, height: 0.8 },
+        shadowOpacity: 1,
+        shadowRadius: 3,
+        elevation: 5
     }
 })
 
