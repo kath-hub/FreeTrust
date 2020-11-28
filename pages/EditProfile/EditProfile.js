@@ -28,7 +28,7 @@ export default class EditProfile extends React.Component {
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  selfIntro:"",
+                  introductiion:"",
                   credentials:""
                 }
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
@@ -43,7 +43,7 @@ export default class EditProfile extends React.Component {
             locations:doc.data().locations,
             serviceFee:doc.data().serviceFee,
             bio:doc.data().bio,
-            selfIntro:doc.data().selfIntro,
+            introduction:doc.data().introduction,
             credentials:doc.data().credentials
                             
           })

@@ -9,9 +9,10 @@ import PersonalProfilePage from './pages/PersonalProfilePage'
 import SearchPage from './pages/SearchPage'
 import RegistrationPage from './pages/RegistrationPage'
 import EditProfile from './pages/EditProfile/EditProfile'
-
-
 import LoginPage from './pages/LoginPage'
+import FreelancerProfilePage from './pages/FreelancerProfilePage'
+
+
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
 
@@ -81,13 +82,14 @@ export default class App extends React.Component {
 
       <NavigationContainer>
         <Stack.Navigator initialRouteName= "Home">
-        <Stack.Screen name="LoginPage" component={LoginPage} />
-        <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
+        <Stack.Screen name="LoginPage" component={LoginPage} options={{title: 'Log in',}}/>
+        <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{title: 'Register',}}/>
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="SearchPage" component={SearchPage} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
+        <Stack.Screen name="FreelancerProfilePage" component={FreelancerProfilePage} options={{headerShown: false}}/>
         
 
         </Stack.Navigator>

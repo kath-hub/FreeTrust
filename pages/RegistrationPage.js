@@ -77,6 +77,7 @@ export default class RegistrationPage extends Component {
                     profileData["profilePicture"] = "";
                     profileData["phoneNumber"] = "";
                     profileData["reviews"] = [];
+                    profileData["jobs"] = [];
                     profileData["bio"] = "";
                     profileData["introduction"] = "";
                     profileData["credentials"] = [];
@@ -115,16 +116,16 @@ export default class RegistrationPage extends Component {
                     });
                 }
 
-                this.props.navigation.navigate('LoginPage')
+                //this.props.navigation.navigate('LoginPage')
 
-                // Alert.alert(
-                //     'Registration Successful',
-                //     'Log in',
-                //     [
-                //       { text: 'OK', onPress: () => this.props.navigation.navigate('LoginPage', data) }
-                //     ],
-                //     { cancelable: false }
-                //   );
+                Alert.alert(
+                    'Registration Successful',
+                    'Log in',
+                    [
+                      { text: 'OK', onPress: () => this.props.navigation.navigate('LoginPage', data) }
+                    ],
+                    { cancelable: false }
+                  );
             })
             .catch((error) => {
                 alert(error)

@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import ProfilePage from './ProfilePage'
+import FreelancerProfilePage from './FreelancerProfilePage'
 import EditProfile from './EditProfile/EditProfile'
 import StarRating from 'react-native-star-rating';
 
@@ -47,7 +47,7 @@ export default class SearchPage extends React.Component {
   }
 
   onPress (item) {
-    this.props.navigation.navigate('EditProfile',{item})
+    this.props.navigation.navigate('FreelancerProfilePage',{item})
   };
 
  render() {

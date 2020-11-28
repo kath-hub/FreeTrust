@@ -1,53 +1,21 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView} from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Carousel from './Carousel';
 import ContactInfo from './ContactInfo';
 import ReviewList from './ReviewList';
-
- const reviews = [
-
-  {creater: "Amy", comment: "bad", createDate: "2020-09-11", rating: 2, id: 1},
-  {creater: "Janice", comment: "bad", createDate: "2020-09-11", rating: 2, id: 2},
-  {creater: "Ada", comment: "bad", createDate: "2020-09-11", rating: 2, id: 3},
-  {creater: "Karen", comment: "bad", createDate: "2020-09-11", rating: 2, id: 4},
-  {creater: "Bella", comment: "bad", createDate: "2020-09-11", rating: 2, id: 5},
-
- ]
-
- const renderPortfolioGallery = (imgArray) => {
-  if (typeof imgArray !== 'undefined'){
-    return (
-      <View>
-            <Carousel data={imgArray} />
-          </View>
-    )
-  }
- }
-
- const renderCredentials = (imgArray) => {
-  if (typeof imgArray !== 'undefined'){
-    return (
-      <View>
-            <Carousel data={imgArray} />
-          </View>
-    )
-  }
- }
+import JobList from './JobList';
 
  const renderReviews = (reviews) => {
-
-  
   if (typeof reviews !== 'undefined'){
     reviews.forEach(function(obj, index) {
       if (typeof obj.createDate !== 'undefine'){
-        try {obj.createDate = obj.createDate.toDate().toDateString()}
+        try {obj.id = index}
         catch(e){
-          obj.createDate = "Recently"
+          // obj.createDate = "Recently"
         } 
       }
-      }
-      )
+    })
     return (
       <View>
             <ReviewList data={reviews} />
@@ -56,20 +24,39 @@ import ReviewList from './ReviewList';
   }
  }
 
+ const renderJobs = (jobs) => {
+  console.log(jobs)
+  console.log("jobs")
+  if (typeof jobs !== 'undefined'){
+    jobs.forEach(function(obj, index) {
+      if (typeof obj.createDate !== 'undefine'){
+        try {obj.id = index}
+        catch(e){
+          // obj.createDate = "Recently"
+        } 
+      }
+    })
+    
+    return (
+      <View>
+            <JobList data={jobs} />
+          </View>
+    )
+  }
+ }
+
+const onAddNewJobPress = () =>{
+
+}
+
 const FirstRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: Colors.white }]}>
-      <Text style={styles.detailText}>Freelancer type:</Text>
-      <Text style={styles.subDetailText}>{props.profile.freelancerType}</Text>
-      <Text style={styles.detailText}>Introduction:</Text>
-      <Text style={styles.subDetailText}>{props.profile.introduction}</Text>
-      <Text style={styles.detailText}>Service fee:</Text>
-      <Text style={styles.subDetailText}>{props.profile.serviceFee}</Text>
-      <Text style={styles.detailText}>Portfolio Gallery</Text>
-      {renderPortfolioGallery(props.profile.portfolioGallery)}
-
-      <Text style={styles.detailText}>Credentials </Text>
-      {renderCredentials(props.profile.credentials)}
-
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() => onAddNewJobPress()}>
+            <Text style={styles.buttonTitle}>Add New Job</Text>
+        </TouchableOpacity>
+        {renderJobs(props.jobs)}
     </View>
 );
 
@@ -100,21 +87,15 @@ const initialLayout = { width: Dimensions.get('window').width };
 export default function FreelanceProfileTabView(props) {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: "Profile" },
+    { key: 'first', title: "Job" },
     { key: 'second', title: 'Review' },
     { key: 'third', title: 'Contact' },
   ]);
 
-//   const renderScene = SceneMap({
-//     first: FirstRoute,
-//     second: SecondRoute,
-//     third: ThirdRoute
-//   });
-
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <FirstRoute profile={props.item["profileData"]} />;
+        return <FirstRoute jobs={props.item["profileData"]["jobs"]} id={props.id} />;
       case 'second':
         return <SecondRoute reviews={props.item["profileData"]["reviews"]}/>;
     case 'third':
@@ -187,4 +168,19 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     marginHorizontal: 20,
   },
+  button: {
+    backgroundColor: '#788eec',
+    marginLeft: 80,
+    marginRight: 80,
+    marginTop: 20,
+    height: 35,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: 'center'
+},
+buttonTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: "bold"
+},
 });

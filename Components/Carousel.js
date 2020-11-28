@@ -37,53 +37,65 @@ const Carousel = ({ data }) => {
 
 
     if (data && data.length) {
-        return (
-            <View>
-                <FlatList data={data}
-                ref = {(flatList) => {this.flatList = flatList}}
-                    keyExtractor={(item, index) => 'key' + index}
-                    horizontal
-                    pagingEnabled
-                    scrollEnabled
-                    snapToAlignment="center"
-                    scrollEventThrottle={16}
-                    decelerationRate={"fast"}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={({ item }) => {
-                        return <CarouselItem item={item} />
-                    }}
-                    onScroll={Animated.event(
-                        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-                        {useNativeDriver: false}
-                    )}
-                />
+        if (typeof data !== 'undefined'){
+            return (
+                <View>
+                    <FlatList 
+                    data={data}
+                    ref = {(flatList) => {this.flatList = flatList}}
+                        keyExtractor={(item, index) => 'key' + index}
+                        horizontal
+                        pagingEnabled
+                        scrollEnabled
+                        snapToAlignment="center"
+                        scrollEventThrottle={16}
+                        decelerationRate={"fast"}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item }) => {
+                            return <CarouselItem item={item} />
+                        }}
+                        onScroll={Animated.event(
+                            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                            {useNativeDriver: false}
+                        )}
+                    />
 
-                <View style={styles.dotView}>
-                    {data.map((_, i) => {
-                        let opacity = position.interpolate({
-                            inputRange: [i - 1, i, i + 1],
-                            outputRange: [0.3, 1, 0.3],
-                            extrapolate: 'clamp'
-                        })
-                        return (
-                            <Animated.View
-                                key={i}
-                                style={{ opacity, height: 10, width: 10, backgroundColor: '#595959', margin: 8, borderRadius: 5 }}
-                            />
-                        )
-                    })}
+                    <View style={styles.dotView}>
+                        {data.map((_, i) => {
+                            let opacity = position.interpolate({
+                                inputRange: [i - 1, i, i + 1],
+                                outputRange: [0.3, 1, 0.3],
+                                extrapolate: 'clamp'
+                            })
+                            return (
+                                <Animated.View
+                                    key={i}
+                                    style={{ opacity, height: 10, width: 10, backgroundColor: '#595959', margin: 8, borderRadius: 5 }}
+                                />
+                            )
+                        })}
 
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
     }
-
-    console.log('Please provide Images')
-    return null
+    else {
+        console.log('Please provide Images')
+        return (<Text style={styles.subDetailText}> No content has been shared </Text>)
+    }
 }
 
 const styles = StyleSheet.create({
-    dotView: { flexDirection: 'row', justifyContent: 'center' }
+    dotView: { flexDirection: 'row', justifyContent: 'center' },
+    subDetailText: {
+        color: 'gray',
+        fontSize: 16,
+        fontWeight: '400',
+        letterSpacing: 0.5,
+        lineHeight: 28,
+        marginHorizontal: 20,
+      },
 })
 
 export default Carousel

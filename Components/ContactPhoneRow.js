@@ -50,6 +50,9 @@ const ContactPhoneRow = ({
     onPressTel,
   }) => {
   
+    if (number===""){
+      return (<View></View>)
+    }
     return (
       <TouchableOpacity onPress={() => onPressTel(number)}>
         <View style={[styles.container, containerStyle]}>
