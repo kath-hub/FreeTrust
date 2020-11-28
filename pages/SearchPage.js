@@ -2,11 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { Image,TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-<<<<<<< HEAD
 import PickFreelanceToSearchPage from './PickFreelanceToSearchPage'
-=======
 import FreelancerProfilePage from './FreelancerProfilePage'
->>>>>>> af17337d4dcaca7964ccb9615817b40f03a5ef03
 import EditProfile from './EditProfile/EditProfile'
 import StarRating from 'react-native-star-rating';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';

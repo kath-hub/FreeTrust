@@ -81,15 +81,9 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-<<<<<<< HEAD
         <Stack.Navigator initialRouteName= "PickFreelanceToSearchPage">
-        <Stack.Screen name="LoginPage" component={LoginPage} />
-        <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
-=======
-        <Stack.Navigator initialRouteName= "Home">
         <Stack.Screen name="LoginPage" component={LoginPage} options={{title: 'Log in',}}/>
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{title: 'Register',}}/>
->>>>>>> af17337d4dcaca7964ccb9615817b40f03a5ef03
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
         <Stack.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} />
         <Stack.Screen name="SearchPage" component={SearchPage} />
