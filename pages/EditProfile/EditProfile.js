@@ -1,8 +1,15 @@
+//todo: 
+
+//searchpage sort function
+//searchpage layout
+//editprofile delete pics
+
+
+
 import React from 'react';
 import { ScrollView, TextInput, Image, TouchableHighlight ,TouchableOpacity, Alert, StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker'
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 
 import * as firebase from 'firebase';
 
@@ -28,8 +35,9 @@ export default class EditProfile extends React.Component {
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  introductiion:"",
-                  credentials:""
+                  selfIntro:"",
+                  credentials:[],
+                  phoneNumber:""
                 }
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
        
@@ -43,8 +51,9 @@ export default class EditProfile extends React.Component {
             locations:doc.data().locations,
             serviceFee:doc.data().serviceFee,
             bio:doc.data().bio,
-            introduction:doc.data().introduction,
-            credentials:doc.data().credentials
+            selfIntro:doc.data().selfIntro,
+            credentials:doc.data().credentials,
+            phoneNumber:doc.data().phoneNumber
                             
           })
 
@@ -57,7 +66,6 @@ export default class EditProfile extends React.Component {
           .child(this.props.route.params.item.id+'_dp')
           .getDownloadURL()
           .then((url) => {
-            //from url you can fetched the uploaded image easily
             this.setState({profilePicture: url});
           })
           .catch((e) => console.log('dp not uploaded ', e));
@@ -66,19 +74,7 @@ export default class EditProfile extends React.Component {
         
     }
 
- 
-    componentDidMount(){
-      
-
-      
-      
-
-        
-    }
-                  
-        
-      
-        
+       
         
   
           
@@ -93,6 +89,7 @@ saveOnPress(){
       bio:this.state.bio,
       freelancerType:this.state.freelancerType,
       introduction:this.state.introduction,
+      phoneNumber:this.state.phoneNumber,
     }
       );
   this.props.navigation.navigate(SearchPage);
@@ -132,52 +129,37 @@ locButtonStat(loc){
 }
 
 
-pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    
-
-    if (!result.cancelled) {
-      this.setState({profilePicture:result.uri});
-
-      var name=this.state.id;
-
-      firebase.storage()
-      .ref(name)
-      .putFile(this.state.profilePicture)
-      .then((snapshot) => {
-        //You can check the image is now uploaded in the storage bucket
-        console.log(` has been successfully uploaded.`);
-      })
-      .catch((e) => console.log('uploading image error => ', e));
-        }
-
-    
-  };
-    
-
-
-  _pickImage = async () => {
+  _pickImage = async (imgType) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     });
 
-    this._handleImagePicked(pickerResult);
+    this._handleImagePicked(pickerResult,imgType);
   };
 
-  _handleImagePicked = async pickerResult => {
+  
+  _handleImagePicked = async (pickerResult,imgType) => {
     try {
-      this.setState({ uploading: true });
 
       if (!pickerResult.cancelled) {
-        const uploadUrl = await this.uploadImageAsync(pickerResult.uri);
-        this.setState({ profilePicture: uploadUrl });
+        const uploadUrl = await this.uploadImageAsync(pickerResult.uri,imgType);
+
+        if (imgType=='dp'){
+          console.log(uploadUrl)
+          this.setState({ profilePicture: uploadUrl });
+        }
+        if (imgType=='c'){
+          console.log(uploadUrl)
+          var c =this.state.credentials;  
+
+          c.push(uploadUrl)
+
+          this.setState({ credentials: c });
+          firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
+
+        }
+        
       }
     } catch (e) {
       console.log(e);
@@ -185,7 +167,7 @@ pickImage = async () => {
     } 
   };
 
-  uploadImageAsync = async (uri)=> {
+  uploadImageAsync = async (uri,imgType)=> {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -200,24 +182,45 @@ pickImage = async () => {
       xhr.send(null);
     });
 
-  
-    const ref = firebase
+
+    let ref=null;
+
+
+    if (imgType=='dp'){
+      ref = firebase
       .storage()
       .ref()
       .child(this.state.id+'_dp');
+    }
+
+    else if(imgType=='c'){
+      
+      var cid=this.state.credentials.length;
+
+      ref = firebase
+      .storage()
+      .ref()
+      .child(this.state.id+'_c_'+cid);
+
+ 
+    }
+    
+
+
     const snapshot = await ref.put(blob);
   
     blob.close();
 
     
     return await snapshot.ref.getDownloadURL();
-  }
+  };
 
+
+
+ 
  render() {
 
-
     
-
      return (  
 
       <ScrollView style={{ backgroundColor: 'white' }}>
@@ -225,7 +228,7 @@ pickImage = async () => {
 
         
 
-          <TouchableHighlight style={{overflow:'hidden',borderRadius:50,alignSelf: 'center'}} onPress={this._pickImage}>
+          <TouchableHighlight style={{overflow:'hidden',borderRadius:50,alignSelf: 'center'}} onPress={()=>this._pickImage('dp')}>
 
           <Image 
           style={styles.tinyLogo}          
@@ -316,6 +319,41 @@ pickImage = async () => {
             
         </View>
 
+        <View style={styles.container,{height:90,flexDirection:"column"}}>
+            <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
+              <Text style={{marginLeft: 20, fontSize:20}}>{`Your contact number:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15}}>{`Only those who you have made a connection with can see your contact number:`}</Text>
+            </View>
+            
+            <TextInput
+
+                    style={styles.input,{marginLeft:20,fontSize:20}}
+                    placeholder={`Your phone number (for communication purposes)`}
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={(text) => this.setState({phoneNumber:text})}
+                    value={this.state.phoneNumber}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+            
+        </View>
+
+        <View style={{flexDirection:"column"}}>
+          <Text style={{marginLeft: 20, fontSize:20}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
+          <View style={{flexDirection:"column"}}>
+          <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:20}}>
+            {this.state.credentials.map((url, index) => {
+              return <Image source={{ uri: url }} style={{width: 150, height: 150}} />;
+            })}
+          </View>
+            <TouchableHighlight style={{alignSelf: 'flex-start'}} onPress={()=>this._pickImage('c')}>
+              <Image 
+              style={{marginLeft:20,width: 100, height: 100}}          
+              source={require('../../assets/addImage.png')}
+              />
+              </TouchableHighlight>
+          </View>
+        </View>
         
 
         <View  style={{marginLeft: 20,marginBottom:15}} ><Text style={{fontSize:20}}>{`Your Work Location(s): \n(Select up to 4 choices)`}</Text></View >
