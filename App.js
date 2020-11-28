@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import ProfilePage from './pages/ProfilePage'
+import PickFreelanceToSearchPage from './pages/PickFreelanceToSearchPage'
 import PersonalProfilePage from './pages/PersonalProfilePage'
 import SearchPage from './pages/SearchPage'
 import RegistrationPage from './pages/RegistrationPage'
@@ -80,12 +80,12 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName= "Home">
+        <Stack.Navigator initialRouteName= "PickFreelanceToSearchPage">
         <Stack.Screen name="LoginPage" component={LoginPage} />
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} />
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+        <Stack.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} />
         <Stack.Screen name="SearchPage" component={SearchPage} />
-        <Stack.Screen name="ProfilePage" component={ProfilePage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
         

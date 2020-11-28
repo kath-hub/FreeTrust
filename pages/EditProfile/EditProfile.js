@@ -1,8 +1,6 @@
 //todo: 
 
-//searchpage sort function
-//searchpage layout
-//editprofile delete pics
+//editprofile layout
 
 
 
@@ -10,11 +8,13 @@ import React from 'react';
 import { ScrollView, TextInput, Image, TouchableHighlight ,TouchableOpacity, Alert, StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker'
 import * as ImagePicker from 'expo-image-picker';
+import ImageModal from 'react-native-image-modal';
 
 import * as firebase from 'firebase';
 
 
-import SearchPage from '../ProfilePage';
+import SearchPage from '../SearchPage';
+import PickFreelanceToSearchPage from '../PickFreelanceToSearchPage';
 
 
 
@@ -71,7 +71,7 @@ export default class EditProfile extends React.Component {
           .catch((e) => console.log('dp not uploaded ', e));
           
 
-        
+        //this.deleteButton=this.deleteButton.bind(this)
     }
 
        
@@ -88,19 +88,36 @@ saveOnPress(){
       locations:this.state.locations,
       bio:this.state.bio,
       freelancerType:this.state.freelancerType,
-      introduction:this.state.introduction,
+      selfIntro:this.state.selfIntro,
       phoneNumber:this.state.phoneNumber,
     }
-      );
-  this.props.navigation.navigate(SearchPage);
-  Alert.alert(
+      ).then(()=>{
+        Alert.alert(
     'Profile Updated',
     'Your Profile Has Updated',
     [
-      { text: 'OK', onPress: () => this.props.navigation.navigate('Home') }
+      { text: 'OK', onPress: () => this.props.navigation.navigate('PickFreelanceToSearchPage') }
     ],
     { cancelable: false }
-  );
+    )
+  this.props.navigation.navigate(SearchPage);})
+  .catch(function error(e){
+    Alert.alert(
+      'Some fields are empty',
+      'Please fill in all the fields',
+      [
+        { text: 'OK'}
+      ],
+      { cancelable: false }
+      )
+
+
+
+  })
+
+        
+  
+  
 }
 
 locationsOnPress (loc){
@@ -146,14 +163,16 @@ locButtonStat(loc){
         const uploadUrl = await this.uploadImageAsync(pickerResult.uri,imgType);
 
         if (imgType=='dp'){
-          console.log(uploadUrl)
+          //console.log(uploadUrl)
           this.setState({ profilePicture: uploadUrl });
+          firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({profilePicture:this.state.profilePicture})
         }
         if (imgType=='c'){
-          console.log(uploadUrl)
-          var c =this.state.credentials;  
+          //console.log(uploadUrl)
+          var c = this.state.credentials
+          var newC ={imgName:this.state.id+'_c_'+this.state.credentials.length,url:uploadUrl};  
 
-          c.push(uploadUrl)
+          c.push(newC)
 
           this.setState({ credentials: c });
           firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
@@ -216,6 +235,63 @@ locButtonStat(loc){
   };
 
 
+  deleteButton(img){
+    console.log(img.imgName)
+    Alert.alert(
+      "Delete Picture",
+      "Are you sure you want to delete this?",
+      [
+        {
+          text: "Yes",
+          onPress: () => {
+
+            firebase.storage().ref().child(img.imgName).delete().then(()=> {
+              // File deleted successfully
+ 
+              let c=this.state.credentials
+              const index = c.indexOf(img);
+              if (index > -1) {
+                c.splice(index, 1);
+                this.setState({ credentials: c });
+                firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
+              }
+
+              Alert.alert(
+                "Delete Successful",
+                "Delete Successful",
+                [
+                  {
+                    text: "OK",
+                  },
+                ],
+                { cancelable: false }
+              );
+            }).catch(function(error) {
+              console.log(error)
+              // Uh-oh, an error occurred!
+              Alert.alert(
+                "Delete Failed",
+                "Delete Failed",
+                [
+                  {
+                    text: "OK",
+                  },
+                ],
+                { cancelable: false }
+              );
+            });
+          }
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
+
+  }
 
  
  render() {
@@ -251,9 +327,12 @@ locButtonStat(loc){
               {label: 'Magician', value: 'Magician'},
               {label: 'Makeup Artist', value: 'Makeup Artist'},
               {label: 'Photographer', value: 'Photographer'},
+              {label: 'Private Tutor', value: 'Private Tutor'},
               {label: 'Translator', value: 'Translator'},
               {label: 'Video Editor', value: 'Video Editor'},
               {label: 'Web Developer', value: 'Web Developer'},
+ 
+              
               
           ]}
           defaultValue={this.state.freelancerType}
@@ -341,14 +420,34 @@ locButtonStat(loc){
         <View style={{flexDirection:"column"}}>
           <Text style={{marginLeft: 20, fontSize:20}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
           <View style={{flexDirection:"column"}}>
-          <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:20}}>
-            {this.state.credentials.map((url, index) => {
-              return <Image source={{ uri: url }} style={{width: 150, height: 150}} />;
+          <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:30}}>
+            {this.state.credentials.map((img, index) => {
+              
+              return (
+                <View style={{flexDirection:"row", justifyContent:"space-around"}}>
+
+                <ImageModal
+                    resizeMode="contain"
+                    imageBackgroundColor="white"
+                    style={{
+                      width: 250,
+                      height: 250,
+                    }}
+                    source={{
+                      uri: img.url,
+                    }}
+                  />
+                  <TouchableHighlight style={{marginLeft:30,alignSelf: 'center', borderRadius:50}}  onPress={()=>this.deleteButton(img)}>
+                    <Image style={{alignSelf: 'center', width: 50, height: 50}} source={require('../../assets/delete.jpg')}/>
+                  </TouchableHighlight>
+                  
+                </View>
+              )
             })}
           </View>
             <TouchableHighlight style={{alignSelf: 'flex-start'}} onPress={()=>this._pickImage('c')}>
               <Image 
-              style={{marginLeft:20,width: 100, height: 100}}          
+              style={{marginLeft:30,width: 80, height: 80}}          
               source={require('../../assets/addImage.png')}
               />
               </TouchableHighlight>
