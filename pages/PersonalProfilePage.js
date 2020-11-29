@@ -134,14 +134,14 @@ class PersonalProfile extends Component {
     if (this.props.userType===1){
       console.log("rendering freelancer tab view")
       return (
-        <FreelanceProfileTabView item={this.props} />
+        <FreelanceProfileTabView item={this.props} navigation={this.props.navigation}/>
       )
     }
 
     if (this.props.userType===0){
       console.log("rendering ss tab view")
       return (
-        <SSProfileTabView item={this.props} />
+        <SSProfileTabView item={this.props} navigation={this.props.navigation}/>
       )
     }
 

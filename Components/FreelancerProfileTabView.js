@@ -1,19 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView} from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar, Text, ScrollView, TouchableOpacity} from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import Carousel from './Carousel';
 import ContactInfo from './ContactInfo';
 import ReviewList from './ReviewList';
-
- const reviews = [
-
-  {creater: "Amy", comment: "bad", createDate: "2020-09-11", rating: 2, id: 1},
-  {creater: "Janice", comment: "bad", createDate: "2020-09-11", rating: 2, id: 2},
-  {creater: "Ada", comment: "bad", createDate: "2020-09-11", rating: 2, id: 3},
-  {creater: "Karen", comment: "bad", createDate: "2020-09-11", rating: 2, id: 4},
-  {creater: "Bella", comment: "bad", createDate: "2020-09-11", rating: 2, id: 5},
-
- ]
 
  const renderPortfolioGallery = (imgArray) => {
   if (typeof imgArray !== 'undefined'){
@@ -36,21 +26,19 @@ import ReviewList from './ReviewList';
  }
 
  const renderReviews = (reviews) => {
-
-  
   if (typeof reviews !== 'undefined'){
     reviews.forEach(function(obj, index) {
       if (typeof obj.createDate !== 'undefine'){
-        try {obj.createDate = obj.createDate.toDate().toDateString()}
+        try {obj.id = index}
         catch(e){
-          obj.createDate = "Recently"
+          //obj.createDate = "Recently"
         } 
       }
       }
       )
     return (
       <View>
-            <ReviewList data={reviews} />
+            <ReviewList data={reviews} userType={1}/>
           </View>
     )
   }
@@ -73,8 +61,26 @@ const FirstRoute = (props) => (
     </View>
 );
 
+const onAddReviewPress = (navigation, id) =>{
+  console.log("add new review")
+  console.log(id)
+
+  const data = {receiverId: id, userType: 1}
+
+  navigation.navigate('AddReviewPage',{data})
+
+}
+
 const SecondRoute = (props) => (
   <View style={[styles.scene, { backgroundColor: '#FFF' }]}>
+      {props.signIn===0 &&
+        
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() => onAddReviewPress(props.navigation, props.id)}>
+            <Text style={styles.buttonTitle}>Add Review</Text>
+        </TouchableOpacity>
+      }
     {renderReviews(props.reviews)}
   </View>
 );
@@ -116,7 +122,10 @@ export default function FreelanceProfileTabView(props) {
       case 'first':
         return <FirstRoute profile={props.item["profileData"]} />;
       case 'second':
-        return <SecondRoute reviews={props.item["profileData"]["reviews"]}/>;
+        return <SecondRoute reviews={props.item["profileData"]["reviews"]} 
+                    signIn={props.item["signIn"]} 
+                    navigation={props.item["navigation"]}
+                    id={props.item['id']}/>;
     case 'third':
         return <ThirdRoute 
                 email={props.item["email"]}
@@ -187,4 +196,19 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     marginHorizontal: 20,
   },
+  button: {
+    backgroundColor: '#788eec',
+    marginLeft: 80,
+    marginRight: 80,
+    marginTop: 20,
+    height: 35,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: 'center'
+},
+buttonTitle: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: "bold"
+},
 });

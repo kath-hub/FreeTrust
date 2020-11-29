@@ -69,7 +69,7 @@ class SSProfile extends Component {
               {this.renderContactHeader()}
             </View>
           </View>
-          <SSProfileTabView item={this.props} />
+          <SSProfileTabView item={this.props} navigation={this.props.navigation}/>
         </ScrollView>
     )
   }
@@ -83,7 +83,8 @@ class SSProfilePage extends Component {
     email: "",
     userType: 1,
     profileData: {},
-    signIn: 0,
+    signIn: 0, // 0 not signIn, 1 = sign in,
+    navigation: {},
 
   }
 
@@ -96,6 +97,7 @@ class SSProfilePage extends Component {
 
     if (user) {
       this.state.id = user.createrId
+      this.state.navigation = this.props.navigation
 
     } else {
       this.props.navigation.navigate('Home')
@@ -103,6 +105,7 @@ class SSProfilePage extends Component {
   }
 
   componentDidMount(){
+    this._isMounted = true;
     const userDocument  = firebase.firestore().collection("users").where("id", '==', this.state.id)
     .get()
     .then(querySnapshot => {

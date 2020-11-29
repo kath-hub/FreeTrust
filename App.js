@@ -13,6 +13,8 @@ import LoginPage from './pages/LoginPage'
 import JobPage from './pages/JobPage'
 import FreelancerProfilePage from './pages/FreelancerProfilePage'
 import SSProfilePage from './pages/SSProfilePage'
+import AddReviewPage from './pages/AddReviewPage'
+import AddNewJobPage from './pages/AddNewJobPage'
 
 
 import ApiKeys from './constants/ApiKeys';
@@ -86,7 +88,7 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName= "LoginPage">
+        <Stack.Navigator initialRouteName= "Home">
         <Stack.Screen name="LoginPage" component={LoginPage} options={{title: 'Log in',}}/>
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{title: 'Register',}}/>
         <Stack.Screen name="Home" component={Home} />
@@ -97,6 +99,8 @@ export default class App extends React.Component {
         <Stack.Screen name="FreelancerProfilePage" component={FreelancerProfilePage} options={{headerShown: false}}/>
         <Stack.Screen name="SSProfilePage" component={SSProfilePage} options={{headerShown: false}}/>
         <Stack.Screen name="JobPage" component={JobPage} />
+        <Stack.Screen name="AddReviewPage" component={AddReviewPage} />
+        <Stack.Screen name="AddNewJobPage" component={AddNewJobPage} />
         
 
         </Stack.Navigator>
