@@ -26,6 +26,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+console.ignoredYellowBox = ['Warning:']
 
 class Home extends React.Component {
 
