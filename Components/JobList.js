@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Dimensions, FlatList, Animated } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, FlatList, Animated, TouchableOpacity } from 'react-native'
 import JobItem from './JobItem'
 
 
 const { width, heigth } = Dimensions.get('window')
 
-const JobList = ({ data }) => {
+const JobList = ({ navigation, data }) => {
     const [dataList, setDataList] = useState(data);
 
     useEffect(()=> {
         setDataList(data)
     })
+
+    const onPress = (item) => {
+        
+        navigation.navigate('SSProfilePage',{item})
+      };
 
     if (data && data.length) {
         return (
@@ -19,7 +24,14 @@ const JobList = ({ data }) => {
             data={data} 
             snapToAlignment="center"
             renderItem={({ item }) => {
-             return <JobItem item={item}/>
+                if (typeof navigation === 'undefined'){
+                    return <JobItem item={item}/>
+                }
+             return (
+                <TouchableOpacity onPress={()=>onPress(item)}>
+                    <JobItem item={item}/>
+                </TouchableOpacity>
+             )
             }}
         />
         )

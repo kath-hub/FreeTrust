@@ -83,6 +83,8 @@ class FreelancerProfilePage extends Component {
     email: "",
     userType: 1,
     profileData: {},
+    signIn: 0, // 0 not signIn, 1 = sign in
+    navigation: {}
 
   }
 
@@ -96,6 +98,7 @@ class FreelancerProfilePage extends Component {
     if (user) {
       this.state.id = user.id
       this.state.profileData = user
+      this.state.navigation = this.props.navigation
 
       console.log("freeoutput")
       console.log(user)

@@ -5,12 +5,18 @@ import ReviewItem from './ReviewItem'
 
 const { width, heigth } = Dimensions.get('window')
 
-const ReviewList = ({ data }) => {
+const ReviewList = ({ navigation, data, userType }) => {
     const [dataList, setDataList] = useState(data);
 
     useEffect(()=> {
         setDataList(data)
     })
+
+
+    const onPress = (item) => {
+        
+        navigation.navigate('SSProfilePage',{item})
+      };
 
     if (data && data.length) {
         return (

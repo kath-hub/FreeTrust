@@ -35,7 +35,7 @@ export default class EditProfile extends React.Component {
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  selfIntro:"",
+                  introduction:"",
                   credentials:[],
                   phoneNumber:""
                 }
@@ -51,7 +51,7 @@ export default class EditProfile extends React.Component {
             locations:doc.data().locations,
             serviceFee:doc.data().serviceFee,
             bio:doc.data().bio,
-            selfIntro:doc.data().selfIntro,
+            introduction:doc.data().introduction,
             credentials:doc.data().credentials,
             phoneNumber:doc.data().phoneNumber
                             
@@ -88,7 +88,7 @@ saveOnPress(){
       locations:this.state.locations,
       bio:this.state.bio,
       freelancerType:this.state.freelancerType,
-      selfIntro:this.state.selfIntro,
+      introduction:this.state.introduction,
       phoneNumber:this.state.phoneNumber,
     }
       ).then(()=>{
@@ -100,7 +100,7 @@ saveOnPress(){
     ],
     { cancelable: false }
     )
-  this.props.navigation.navigate(SearchPage);})
+    })
   .catch(function error(e){
     Alert.alert(
       'Some fields are empty',
@@ -346,8 +346,8 @@ locButtonStat(loc){
 
         <View style={styles.container}>
             <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
-              <Text style={{marginLeft: 20, fontSize:20}}>{`Profile Highlight:`}</Text>
-              <Text style={{marginLeft: 20, fontSize:15}}>{`(This will appear\n on the search page)`}</Text>
+              <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Profile Highlight:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15, color: 'gray',}}>{`(This will appear\n on the search page)`}</Text>
             </View>
             
             <TextInput
@@ -365,7 +365,7 @@ locButtonStat(loc){
 
 
         <View style={styles.container}>
-            <Text style={{marginLeft: 20, fontSize:20}}>{`Service Fee:`}</Text>
+            <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Service Fee:`}</Text>
             <TextInput
 
                     style={styles.input}
@@ -381,13 +381,14 @@ locButtonStat(loc){
 
         <View style={styles.container,{flexDirection:"column"}}>
             <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
-              <Text style={{marginLeft: 20, fontSize:20}}>{`Detailed Self Introduction:`}</Text>
-              <Text style={{marginLeft: 20, fontSize:15}}>{`(This will appear on your profile page)`}</Text>
+              <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Detailed Self Introduction:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15, color: 'gray'}}>{`(This will appear on your profile page)`}</Text>
             </View>
             
             <TextInput
 
-                    style={styles.input,{marginLeft:20,fontSize:20}}
+                    style={styles.input,{marginLeft:20,fontSize:20,height:90}}
+                    multiline={true}
                     placeholder={`Clients will see your self introduction\nwhen they have clicked into your profile`}
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => this.setState({introduction:text})}
@@ -400,8 +401,8 @@ locButtonStat(loc){
 
         <View style={styles.container,{height:90,flexDirection:"column"}}>
             <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
-              <Text style={{marginLeft: 20, fontSize:20}}>{`Your contact number:`}</Text>
-              <Text style={{marginLeft: 20, fontSize:15}}>{`Only those who you have made a connection with can see your contact number:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your contact number:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15, color: 'gray'}}>{`Only those who you have made a connection with can see your contact number:`}</Text>
             </View>
             
             <TextInput
@@ -418,7 +419,7 @@ locButtonStat(loc){
         </View>
 
         <View style={{flexDirection:"column"}}>
-          <Text style={{marginLeft: 20, fontSize:20}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
+          <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
           <View style={{flexDirection:"column"}}>
           <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:30}}>
             {this.state.credentials.map((img, index) => {
@@ -455,7 +456,7 @@ locButtonStat(loc){
         </View>
         
 
-        <View  style={{marginLeft: 20,marginBottom:15}} ><Text style={{fontSize:20}}>{`Your Work Location(s): \n(Select up to 4 choices)`}</Text></View >
+        <View  style={{marginLeft: 20,marginBottom:15,}} ><Text style={{fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your Work Location(s): \n(Select up to 4 choices)`}</Text></View >
         <View style={{flexDirection:"row", justifyContent:"space-around", marginBottom:10}}>
               <TouchableOpacity  style={{borderRadius: 15, justifyContent: 'center', height:30, width: '40%', backgroundColor:'white'}} ><Text style={{textAlign: 'center'}}></Text></TouchableOpacity >
               <TouchableOpacity  disabled={this.locButtonStat("Online")} style={{borderRadius: 15, justifyContent: 'center', height:30, width: '40%', backgroundColor:this.state.locations.indexOf("Online")>-1?'green':'grey'}} onPress={()=>this.locationsOnPress("Online")}><Text style={{textAlign: 'center', fontSize:20}}>Online</Text></TouchableOpacity >
@@ -511,7 +512,7 @@ locButtonStat(loc){
 
         
             <View style={{alignItems:'center'}}>
-              <TouchableOpacity  style={{width:100,borderRadius:50,backgroundColor:'#17E0FF'}}  onPress={()=>this.saveOnPress()}><Text style={{alignSelf: 'center',fontSize: 25}}>Save</Text></TouchableOpacity >
+              <TouchableOpacity  style={{width:100,borderRadius:50,backgroundColor:'#788eec'}}  onPress={()=>this.saveOnPress()}><Text style={{alignSelf: 'center',fontSize: 25}}>Save</Text></TouchableOpacity >
             </View>
       </ScrollView>
 

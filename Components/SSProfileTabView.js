@@ -6,7 +6,7 @@ import ContactInfo from './ContactInfo';
 import ReviewList from './ReviewList';
 import JobList from './JobList';
 
- const renderReviews = (reviews) => {
+ const renderReviews = (reviews, navigation) => {
   if (typeof reviews !== 'undefined'){
     reviews.forEach(function(obj, index) {
       if (typeof obj.createDate !== 'undefine'){
@@ -18,7 +18,7 @@ import JobList from './JobList';
     })
     return (
       <View>
-            <ReviewList data={reviews} />
+            <ReviewList data={reviews} navigation={navigation} userType={0}/>
           </View>
     )
   }
@@ -45,24 +45,49 @@ import JobList from './JobList';
   }
  }
 
-const onAddNewJobPress = () =>{
+const onAddNewJobPress = (navigation, id) =>{
+  console.log("add new job")
+  console.log(id)
+
+  navigation.navigate('AddNewJobPage',{id})
+
+}
+
+const onAddReviewPress = (navigation, id) =>{
+  console.log("add new review")
+  console.log(id)
+
+  const data = {receiverId: id, userType: 1}
+
+  navigation.navigate('AddReviewPage',{data})
 
 }
 
 const FirstRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: Colors.white }]}>
-        <TouchableOpacity
-            style={styles.button}
-            onPress={() => onAddNewJobPress()}>
-            <Text style={styles.buttonTitle}>Add New Job</Text>
-        </TouchableOpacity>
+        {props.signIn===1 &&
+        
+          <TouchableOpacity
+              style={styles.button}
+              onPress={() => onAddNewJobPress(props.navigation, props.id)}>
+              <Text style={styles.buttonTitle}>Add New Job</Text>
+          </TouchableOpacity>
+        }
         {renderJobs(props.jobs)}
     </View>
 );
 
 const SecondRoute = (props) => (
   <View style={[styles.scene, { backgroundColor: '#FFF' }]}>
-    {renderReviews(props.reviews)}
+      {props.signIn===0 &&
+        
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() => onAddReviewPress(props.navigation, props.id)}>
+            <Text style={styles.buttonTitle}>Add Review</Text>
+        </TouchableOpacity>
+      }
+    {renderReviews(props.reviews, props.navigation)}
   </View>
 );
 
@@ -95,9 +120,12 @@ export default function FreelanceProfileTabView(props) {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <FirstRoute jobs={props.item["profileData"]["jobs"]} id={props.id} />;
+        return <FirstRoute jobs={props.item["profileData"]["jobs"]} 
+                          id={props.item["id"]} 
+                          signIn={props.item["signIn"]}
+                          navigation={props.navigation}/>;
       case 'second':
-        return <SecondRoute reviews={props.item["profileData"]["reviews"]}/>;
+        return <SecondRoute reviews={props.item["profileData"]["reviews"]} signIn={props.item["signIn"]} navigation={props.navigation}/>;
     case 'third':
         return <ThirdRoute 
                 email={props.item["email"]}

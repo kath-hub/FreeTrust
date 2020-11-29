@@ -14,22 +14,16 @@ import PropTypes from 'prop-types';
 const firebase = require("firebase");
 require("firebase/firestore");
 import ApiKeys from '../constants/ApiKeys';
-import EditProfile from './EditProfile/EditProfile'
 
-import FreelanceProfileTabView from '../Components/FreelancerProfileTabView'
 import SSProfileTabView from '../Components/SSProfileTabView'
 
-class PersonalProfile extends Component {
+class SSProfile extends Component {
 
   static defaultProps = {
     containerStyle: {},
   }
 
-  onEditPress = (item) => {
-    this.props.navigation.navigate('EditProfile',{item})
-  }
-
-  renderFreelancerHeader = () => {
+  renderContactHeader = () => {
     return (
       <View style={styles.headerContainer}>
             <View style={styles.userRow}>
@@ -60,120 +54,37 @@ class PersonalProfile extends Component {
                             marginVertical= '5'
                             />
                         </View>
-                </View>
-                <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.onEditPress(this.props.profileData)}>
-                        <Text style={styles.buttonTitle}>edit</Text>
-                    </TouchableOpacity>
-                
+                </View>              
             </View>
         
       </View>
     )
-  }
-
-    renderSSHeader = () => {
-    return (
-      <View style={styles.headerContainer}>
-            <View style={styles.userRow}>
-            <Image
-              style={styles.userImage}
-              source={(this.props.profileData["profilePicture"]!=="")?{uri: this.props.profileData["profilePicture"]}:require('../assets/blankdp.jpg')}
-            />
-            <View style={styles.userNameRow}>
-              <Text style={styles.userNameText}>{this.props.name}</Text>
-            </View>
-            <View style={styles.userBioRow}>
-              <Text style={styles.userBioText}>{this.props.profileData["bio"]}</Text>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
-                    <View>
-                        <Text style={styles.ratingText}>Average Rating: </Text>
-                    </View>
-                    
-                    <View style={{flex: 0.5}}>
-                        <StarRating 
-                            disabled={true}
-                            rating={this.props.profileData["averageRating"]}
-                            numberOfStars={5}
-                            fullStarColor='#edca79'
-                            emptyStarColor='#E5E5EA'
-                            name='rating'
-                            starSize={22}
-                            marginVertical= '5'
-                            />
-                        </View>
-                </View>
-                {/* <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.onEditPress(this.props.profileData)}>
-                        <Text style={styles.buttonTitle}>edit</Text>
-                    </TouchableOpacity> */}
-                
-            </View>
-        
-      </View>
-    )
-  }
-
-  renderHeaderView = () => {
-    if (this.props.userType===1){
-      console.log("rendering freelancer header view")
-      return this.renderFreelancerHeader()
-    }
-
-    if (this.props.userType===0){
-      console.log("rendering ss header view")
-      return this.renderSSHeader()
-    }
-
-  }
-
-  renderTabView = () => {
-    if (this.props.userType===1){
-      console.log("rendering freelancer tab view")
-      return (
-        <FreelanceProfileTabView item={this.props} navigation={this.props.navigation}/>
-      )
-    }
-
-    if (this.props.userType===0){
-      console.log("rendering ss tab view")
-      return (
-        <SSProfileTabView item={this.props} navigation={this.props.navigation}/>
-      )
-    }
-
   }
 
   render() {
-
     return (
         <ScrollView style={styles.scroll}>
           <View style={[styles.container, this.props.containerStyle]}>
             <View style={styles.cardContainer}>
-              {this.renderHeaderView()}
+              {this.renderContactHeader()}
             </View>
           </View>
-          <View>
-          {this.renderTabView()}
-          </View>
-          
+          <SSProfileTabView item={this.props} navigation={this.props.navigation}/>
         </ScrollView>
     )
   }
 }
 
-class PersonalProfilePage extends Component {
+class SSProfilePage extends Component {
 
   state = {
     id: "",
     name: "",
     email: "",
-    userType: -1,
+    userType: 1,
     profileData: {},
-    signIn: 0, //0: not signed in, 1 = signed
+    signIn: 0, // 0 not signIn, 1 = sign in,
+    navigation: {},
 
   }
 
@@ -182,21 +93,19 @@ class PersonalProfilePage extends Component {
 
     if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
 
-    var user = firebase.auth().currentUser;
+    var user = this.props.route.params.item
 
     if (user) {
-      // User is signed in.
-      this.state.id = user.uid
-      this.state.email = user.email
-      this.state.signIn = 1
+      this.state.id = user.createrId
+      this.state.navigation = this.props.navigation
 
     } else {
-      // No user is signed in.
-      this.props.navigation.navigate('LoginPage')
+      this.props.navigation.navigate('Home')
     }
   }
 
   componentDidMount(){
+    this._isMounted = true;
     const userDocument  = firebase.firestore().collection("users").where("id", '==', this.state.id)
     .get()
     .then(querySnapshot => {
@@ -205,7 +114,7 @@ class PersonalProfilePage extends Component {
         const userDoc = querySnapshot.docs[0].data()
 
         this.setState({name:userDoc.name})
-        this.setState({userType:userDoc.userType})
+        this.setState({email:userDoc.email})
 
         return userDoc
       }
@@ -214,42 +123,19 @@ class PersonalProfilePage extends Component {
     userDocument.then( userDoc =>{
       console.log(userDoc)
 
-      if (userDoc.userType === 1){
-        console.log("Loading freelancer profile")
-
-        this.profile  = firebase.firestore().collection("freelancers")
-        .where("id", '==', userDoc.id)
-        .onSnapshot(querySnapshot => {
-          if(!querySnapshot.empty) {
-            console.log("freelancer get")
-            var profileData = querySnapshot.docs[0].data()
-            // profileData.profilePicture = "https://i.imgur.com/X64evcq.jpg"
-            this.setState({profileData:profileData})
-            // console.log(profileData);
-            
-          }
-          else {
-            console.log("No profile data");
-          }
-        })
-      }
-
-      if (userDoc.userType === 0){
-        console.log("Loading service seeker profile")
-        this.profile  = firebase.firestore().collection("ss")
-        .where("id", '==', userDoc.id)
-        .onSnapshot(querySnapshot => {
-          if(!querySnapshot.empty) {
-            console.log("freelancer get")
-            var profileData = querySnapshot.docs[0].data()
-            this.setState({profileData:profileData})            
-          }
-          else {
-            console.log("No profile data");
-          }
-        })
-
-      }
+      console.log("Loading SS profile")
+      this.profile  = firebase.firestore().collection("ss")
+      .where("id", '==', userDoc.id)
+      .onSnapshot(querySnapshot => {
+        if(!querySnapshot.empty) {
+          console.log("SS get")
+          var profileData = querySnapshot.docs[0].data()
+          this.setState({profileData:profileData})     
+        }
+        else {
+          console.log("No profile data");
+        }
+      })
 
     })
 
@@ -258,11 +144,12 @@ class PersonalProfilePage extends Component {
   
   render(){
 
+  console.log("line149")
   console.log(this.state);
-  return <PersonalProfile {...this.state} {...this.props}/>}
+  return <SSProfile {...this.state} {...this.props}/>}
 }
 
-export default PersonalProfilePage
+export default SSProfilePage
 
 const Colors = {
   red: '#FF3B30',
