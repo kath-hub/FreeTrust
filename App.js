@@ -10,7 +10,9 @@ import SearchPage from './pages/SearchPage'
 import RegistrationPage from './pages/RegistrationPage'
 import EditProfile from './pages/EditProfile/EditProfile'
 import LoginPage from './pages/LoginPage'
+import JobPage from './pages/JobPage'
 import FreelancerProfilePage from './pages/FreelancerProfilePage'
+import SSProfilePage from './pages/SSProfilePage'
 
 
 import ApiKeys from './constants/ApiKeys';
@@ -41,12 +43,14 @@ class Home extends React.Component {
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
 
-        if (route.name === 'SearchPage') {
+        if (route.name === 'PickFreelanceToSearchPage') {
           iconName = focused
             ? 'account-search'
             : 'account-search-outline';
         } else if (route.name === 'PersonalProfilePage') {
           iconName = focused ? 'account-circle' : 'account-circle-outline';
+        } else if (route.name === 'JobPage') {
+          iconName = focused ? 'briefcase-search' : 'briefcase-search-outline';
         }
 
         return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
@@ -57,7 +61,8 @@ class Home extends React.Component {
       inactiveTintColor: 'gray',
       showLabel: false
     }}>
-      <Tab.Screen name="SearchPage" component={SearchPage} />
+      <Tab.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} />
+      <Tab.Screen name="JobPage" component={JobPage}/>
       <Tab.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
 
     </Tab.Navigator>
@@ -81,15 +86,17 @@ export default class App extends React.Component {
       return (
 
       <NavigationContainer>
-        <Stack.Navigator initialRouteName= "PickFreelanceToSearchPage">
+        <Stack.Navigator initialRouteName= "LoginPage">
         <Stack.Screen name="LoginPage" component={LoginPage} options={{title: 'Log in',}}/>
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{title: 'Register',}}/>
-        <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} />
         <Stack.Screen name="SearchPage" component={SearchPage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
         <Stack.Screen name="FreelancerProfilePage" component={FreelancerProfilePage} options={{headerShown: false}}/>
+        <Stack.Screen name="SSProfilePage" component={SSProfilePage} options={{headerShown: false}}/>
+        <Stack.Screen name="JobPage" component={JobPage} />
         
 
         </Stack.Navigator>

@@ -1,35 +1,36 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image, Dimensions } from 'react-native'
+import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
 
 
+
+
 const JobItem = ({ item }) => {
+
     return (
-        <View style={styles.cardView}>
-            <View style={styles.textView}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
 
-                    <Text style={styles.itemCreator}> {item.creater}</Text>
-                    
-                    <Text style={styles.itemLightText}>{item.createDate}</Text>
-                    
+            <View style={styles.cardView}>
+                <View style={styles.textView}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+
+                        <Text style={styles.itemCreator}> {item.creater}</Text>
+                        
+                        <Text style={styles.itemLightText}>{item.createDate}</Text>
+                        
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={styles.itemTitle}> {item.jobTitle}</Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <Text style={styles.itemComment}> {item.jobDetail}</Text>
+                    </View>
+
                 </View>
-
-                
-
-
-                <View style={{flex: 1}}>
-                    <Text style={styles.itemTitle}> {item.jobTitle}</Text>
-                </View>
-                <View style={{flex: 1}}>
-                    <Text style={styles.itemComment}> {item.jobDetail}</Text>
-                </View>
-                    
-
-
             </View>
-        </View>
+
+        
+
     )
 }
 

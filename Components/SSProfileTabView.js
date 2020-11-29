@@ -51,11 +51,14 @@ const onAddNewJobPress = () =>{
 
 const FirstRoute = (props) => (
     <View style={[styles.scene, { backgroundColor: Colors.white }]}>
-        <TouchableOpacity
-            style={styles.button}
-            onPress={() => onAddNewJobPress()}>
-            <Text style={styles.buttonTitle}>Add New Job</Text>
-        </TouchableOpacity>
+        {props.signIn===1 &&
+        
+          <TouchableOpacity
+              style={styles.button}
+              onPress={() => onAddNewJobPress()}>
+              <Text style={styles.buttonTitle}>Add New Job</Text>
+          </TouchableOpacity>
+        }
         {renderJobs(props.jobs)}
     </View>
 );
@@ -95,7 +98,7 @@ export default function FreelanceProfileTabView(props) {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'first':
-        return <FirstRoute jobs={props.item["profileData"]["jobs"]} id={props.id} />;
+        return <FirstRoute jobs={props.item["profileData"]["jobs"]} id={props.id} signIn={props.item["signIn"]}/>;
       case 'second':
         return <SecondRoute reviews={props.item["profileData"]["reviews"]}/>;
     case 'third':
