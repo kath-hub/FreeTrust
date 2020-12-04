@@ -43,7 +43,7 @@ export default class AddReviewPage extends Component {
         console.log("press")
         console.log(this.state)
 
-        if (this.state.creater.Id === this.state.receiverId){
+        if (this.state.createrId === this.state.receiverId){
             Alert.alert(
                 'Invalid',
                 'You cannot leave comment for yourself',
@@ -137,6 +137,83 @@ export default class AddReviewPage extends Component {
 
                     receiverRef = firebase.firestore().collection("freelancers").doc(receiverDocumentId);
 
+
+                    receiverRef.update({
+                        averageRating: averageRating
+                    })
+                    .then(function() {
+                        console.log("average rating successfully updated!");
+
+                        receiverRef.update({
+                            reviews: firebase.firestore.FieldValue.arrayUnion(newReview)
+                        })
+                        .then(() => {
+                            console.log("reviews successfully updated!");
+                            console.log(receiverDocumentId)
+                            Alert.alert(
+                                'Review submitted',
+                                'Your review has been received',
+                                [
+                                  { text: 'OK', onPress: () => {} }
+                                ],
+                                { cancelable: false }
+                                )
+                            }).catch(function error(e){
+                                Alert.alert(
+                                  e,
+                                  [
+                                    { text: 'OK'}
+                                  ],
+                                  { cancelable: false }
+                                  )
+                            
+                            })
+                        
+                    })
+                    .catch(function(error) {
+                        // The document probably doesn't exist.
+                        console.error("Error updating average rating: ", error);
+                    });
+
+                })
+            }
+
+
+            if (this.state.userType===0){
+                var numOfReview = 0
+                var averageRating = 0
+
+                var receiverDocumentId = ""
+                var receiverRef = firebase.firestore().collection("ss").where("id", '==', this.state.receiverId)
+                receiverRef.get().then(querySnapshot => {
+                    if (!querySnapshot.empty){
+                        const userDoc = querySnapshot.docs[0].data()
+                        console.log("receiver get")
+                        numOfReview = userDoc.reviews.length
+                        averageRating = userDoc.averageRating
+                        receiverDocumentId = querySnapshot.docs[0].id
+
+
+                    }
+                }).then( ()=> {
+                    console.log(numOfReview)
+                    console.log(averageRating)
+
+                    var newReview = {
+                        creater: this.state.creater,
+                        createDate: this.state.createDate,
+                        createrId: this.state.createrId,
+                        comment: this.state.comment,
+                        rating: this.state.rating
+                    }
+
+                    var oldSumOfRating = averageRating*numOfReview
+                    averageRating = (Math.round((oldSumOfRating+newReview.rating)*100/(numOfReview+1)))/100
+                    console.log("new average")
+                    console.log(averageRating)
+                    console.log(receiverDocumentId)
+
+                    receiverRef = firebase.firestore().collection("ss").doc(receiverDocumentId);
 
                     receiverRef.update({
                         averageRating: averageRating

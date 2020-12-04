@@ -57,7 +57,7 @@ const onAddReviewPress = (navigation, id) =>{
   console.log("add new review")
   console.log(id)
 
-  const data = {receiverId: id, userType: 1}
+  const data = {receiverId: id, userType: 0}
 
   navigation.navigate('AddReviewPage',{data})
 
@@ -125,7 +125,10 @@ export default function FreelanceProfileTabView(props) {
                           signIn={props.item["signIn"]}
                           navigation={props.navigation}/>;
       case 'second':
-        return <SecondRoute reviews={props.item["profileData"]["reviews"]} signIn={props.item["signIn"]} navigation={props.navigation}/>;
+        return <SecondRoute reviews={props.item["profileData"]["reviews"]} 
+                                      id={props.item["id"]} 
+                                      signIn={props.item["signIn"]} 
+                                      navigation={props.navigation}/>;
     case 'third':
         return <ThirdRoute 
                 email={props.item["email"]}
