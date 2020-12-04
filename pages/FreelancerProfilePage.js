@@ -96,7 +96,7 @@ class FreelancerProfilePage extends Component {
     var user = this.props.route.params.item.data()
 
     if (user) {
-      this.state.id = user.id
+      this.state.id = this.props.route.params.item.id
       this.state.profileData = user
       this.state.navigation = this.props.navigation
 
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     backgroundColor: '#FFF',
-    //flex: 1,
+    flex: 1,
    //marginBottom: 55,
   },
   mainViewStyle: {

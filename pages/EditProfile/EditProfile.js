@@ -35,7 +35,7 @@ export default class EditProfile extends React.Component {
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  introduction:"",
+                  selfIntro:"",
                   credentials:[],
                   phoneNumber:""
                 }
@@ -96,7 +96,7 @@ saveOnPress(){
     'Profile Updated',
     'Your Profile Has Updated',
     [
-      { text: 'OK', onPress: () => this.props.navigation.navigate('PickFreelanceToSearchPage') }
+      { text: 'OK', onPress: () => this.props.navigation.navigate('PersonalProfilePage') }
     ],
     { cancelable: false }
     )
@@ -148,8 +148,9 @@ locButtonStat(loc){
 
   _pickImage = async (imgType) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaType: 'photo',
       allowsEditing: true,
-      aspect: [4, 3],
+      //aspect: [4, 3],
     });
 
     this._handleImagePicked(pickerResult,imgType);

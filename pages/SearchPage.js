@@ -56,23 +56,27 @@ export default class SearchPage extends React.Component {
     this.props.navigation.navigate('FreelancerProfilePage',{item})
   };
 
-  filterLocation(){
-
-  }
-
  render() {
   function loc(locations) {
 
   
     const list = []
+
+    if(locations.indexOf("Online")>-1){
+      list.push(<Text style={styles.locations}>Online</Text>)
+    }
   
-    locations.forEach((location) => {
-      
-      if (location=="Central and Western"){
+    locations.sort().forEach((location) => {
+
+      if(location!="Online"){
+        if (location=="Central and Western"){
         list.push(<Text style={styles.locations}>Central and</Text>)
         list.push(<Text style={styles.locations}>Western</Text>)
+        }
+        else{list.push(<Text style={styles.locations}>{location}</Text>)}
       }
-      else{list.push(<Text style={styles.locations}>{location}</Text>)}
+      
+      
     })
   
     return (
@@ -135,7 +139,7 @@ export default class SearchPage extends React.Component {
          
         <View style={{width:'100%',alignSelf:'flex-start',justifyContent: 'space-between', flexDirection:"row"}}> 
           <Text style={{marginLeft:3,fontSize:25,alignSelf:'center'}}>{this.props.route.params.freelancetype}</Text>
-          <View style={{marginTop:25,alignSelf:'flex-end',justifyContent: 'center'}}>
+          <View style={{marginTop:25,justifyContent: 'center'}}>
             <Menu
               visible={this.state.menuVisible}
               onDismiss={()=>this.setState({menuVisible:false})}
@@ -198,8 +202,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop:20,
-    marginBottom:20,
+    //marginTop:20,
+    //marginBottom:20,
+    //marginHorizontal:10
     padding: 10,
   },
 
@@ -208,7 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     //marginRight:40,
     //marginLeft:40,
-    marginBottom:20,
+    marginBottom:15,
     //paddingTop:20,
     //paddingBottom:20,
     backgroundColor:'#788eec',

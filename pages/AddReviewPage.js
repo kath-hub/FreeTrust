@@ -74,7 +74,7 @@ export default class AddReviewPage extends Component {
                 'Empty rating',
                 'Please fill in rating',
                 [
-                  { text: 'OK', onPress: () => {} }
+                  { text: 'OK', onPress: () => { }}
                 ],
                 { cancelable: false }
               );
@@ -136,6 +136,7 @@ export default class AddReviewPage extends Component {
                     console.log(receiverDocumentId)
 
                     receiverRef = firebase.firestore().collection("freelancers").doc(receiverDocumentId);
+
 
                     receiverRef.update({
                         averageRating: averageRating
