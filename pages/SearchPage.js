@@ -4,7 +4,6 @@ import { Image,TouchableOpacity, SafeAreaView, FlatList, StyleSheet, Text, View 
 import { NavigationContainer } from '@react-navigation/native';
 import PickFreelanceToSearchPage from './PickFreelanceToSearchPage'
 import FreelancerProfilePage from './FreelancerProfilePage'
-import EditProfile from './EditProfile/EditProfile'
 import StarRating from 'react-native-star-rating';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 
@@ -53,6 +52,7 @@ export default class SearchPage extends React.Component {
   }
 
   onPress (item) {
+    //this.props.navigation.navigate('FreelancerEditProfile',{item})
     this.props.navigation.navigate('FreelancerProfilePage',{item})
   };
 
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     width:'30%',
     //justifyContent: "space-between",
     marginVertical:12,
-    marginLeft:12
+    marginLeft:2
 
   },
   itemright: { 
@@ -248,9 +248,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     //justifyContent: "space-between",
     //height:120,
-    width:'30%',
+    width:'32%',
     marginVertical:12,
-    marginRight:12,
+    marginRight:10,
     //marginLeft:12
   },
   name: {
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   },
 
   bio: {
-    fontSize: 22,
+    fontSize: 20,
     marginTop:5,
     fontWeight:"700"
   },

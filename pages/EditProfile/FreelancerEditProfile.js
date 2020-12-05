@@ -1,14 +1,13 @@
-//todo: 
-
-//editprofile layout
 
 
 
 import React from 'react';
-import { ScrollView, TextInput, Image, TouchableHighlight ,TouchableOpacity, Alert, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, TextInput, Image, TouchableHighlight ,TouchableOpacity, Alert, StyleSheet,  View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker'
 import * as ImagePicker from 'expo-image-picker';
 import ImageModal from 'react-native-image-modal';
+import DialogInput from 'react-native-dialog-input';
+import { Divider, Text } from 'react-native-paper';
 
 import * as firebase from 'firebase';
 
@@ -18,7 +17,7 @@ import PickFreelanceToSearchPage from '../PickFreelanceToSearchPage';
 
 
 
-export default class EditProfile extends React.Component {
+export default class FreelancerEditProfile extends React.Component {
 
     
 
@@ -35,9 +34,12 @@ export default class EditProfile extends React.Component {
                   locations:[],
                   serviceFee:"",
                   bio:"",
-                  selfIntro:"",
+                  introduction:"",
                   credentials:[],
-                  phoneNumber:""
+                  portfolioGallery:[],
+                  phoneNumber:"",
+                  isDialogVisible:false,
+                  PGIndex:0
                 }
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
        
@@ -53,6 +55,7 @@ export default class EditProfile extends React.Component {
             bio:doc.data().bio,
             introduction:doc.data().introduction,
             credentials:doc.data().credentials,
+            portfolioGallery:doc.data().portfolioGallery,
             phoneNumber:doc.data().phoneNumber
                             
           })
@@ -71,7 +74,6 @@ export default class EditProfile extends React.Component {
           .catch((e) => console.log('dp not uploaded ', e));
           
 
-        //this.deleteButton=this.deleteButton.bind(this)
     }
 
        
@@ -179,6 +181,18 @@ locButtonStat(loc){
           firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
 
         }
+
+        if (imgType=='pg'){
+          console.log(uploadUrl)
+          var pg = this.state.portfolioGallery
+          var newPg ={imgName:this.state.id+'_pg_'+this.state.portfolioGallery.length,url:uploadUrl};  
+
+          pg.push(newPg)
+
+          this.setState({ portfolioGallery: pg });
+          firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({portfolioGallery:this.state.portfolioGallery})
+
+        }
         
       }
     } catch (e) {
@@ -224,6 +238,18 @@ locButtonStat(loc){
 
  
     }
+
+    else if(imgType=='pg'){
+      
+      var cid=this.state.portfolioGallery.length;
+
+      ref = firebase
+      .storage()
+      .ref()
+      .child(this.state.id+'_pg_'+cid);
+
+ 
+    }
     
 
 
@@ -236,7 +262,7 @@ locButtonStat(loc){
   };
 
 
-  deleteButton(img){
+  deleteButton(img,imgType){
     console.log(img.imgName)
     Alert.alert(
       "Delete Picture",
@@ -247,15 +273,26 @@ locButtonStat(loc){
           onPress: () => {
 
             firebase.storage().ref().child(img.imgName).delete().then(()=> {
-              // File deleted successfully
- 
-              let c=this.state.credentials
-              const index = c.indexOf(img);
-              if (index > -1) {
-                c.splice(index, 1);
-                this.setState({ credentials: c });
-                firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
+              if (imgType=='c'){
+                let c=this.state.credentials
+                const index = c.indexOf(img);
+                if (index > -1) {
+                  c.splice(index, 1);
+                  this.setState({ credentials: c });
+                  firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({credentials:this.state.credentials})
+                }
               }
+
+              if (imgType=='pg'){
+                let pg=this.state.portfolioGallery
+                const index = pg.indexOf(img);
+                if (index > -1) {
+                  pg.splice(index, 1);
+                  this.setState({ portfolioGallery: pg });
+                  firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({portfolioGallery:this.state.portfolioGallery})
+                }
+              }
+              
 
               Alert.alert(
                 "Delete Successful",
@@ -294,7 +331,7 @@ locButtonStat(loc){
 
   }
 
- 
+
  render() {
 
     
@@ -314,7 +351,7 @@ locButtonStat(loc){
 
           
           </TouchableHighlight>
-
+        <Text style={{alignSelf: 'center', fontSize: 15}}>(Click above to change display picture)</Text>
         <Text style={{alignSelf: 'center', fontSize: 25}}>{this.state.name}</Text>
 
 
@@ -345,37 +382,41 @@ locButtonStat(loc){
         </View>
 
 
-        <View style={styles.container}>
+        <View style={{marginTop:20,width:'90%'}}>
             <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
               <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Profile Highlight:`}</Text>
-              <Text style={{marginLeft: 20, fontSize:15, color: 'gray',}}>{`(This will appear\n on the search page)`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15, color: 'gray',}}>{`(This will appear on the search page)`}</Text>
             </View>
             
             <TextInput
 
-                    style={styles.input}
+                    style={styles.input,{marginHorizontal:20,marginVertical:10,fontSize:20}}
                     placeholder='Profile Highlight'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => this.setState({bio:text})}
                     value={this.state.bio}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
+                    maxLength={30}
+                    borderBottomWidth={1}
                 />
             
         </View>
 
 
-        <View style={styles.container}>
+        <View style={{width:'90%'}}>
             <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Service Fee:`}</Text>
             <TextInput
 
-                    style={styles.input}
+                    style={styles.input,{marginHorizontal:20,marginVertical:10,fontSize:20}}
                     placeholder='serviceFee'
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => this.setState({serviceFee:text})}
                     value={this.state.serviceFee}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
+                    maxLength={30}
+                    borderBottomWidth={1}
                 />
             
         </View>
@@ -386,9 +427,10 @@ locButtonStat(loc){
               <Text style={{marginLeft: 20, fontSize:15, color: 'gray'}}>{`(This will appear on your profile page)`}</Text>
             </View>
             
+            <View style={{marginHorizontal:20,marginVertical:10,borderWidth:1,padding:10}}>
             <TextInput
 
-                    style={styles.input,{marginLeft:20,fontSize:20,height:90}}
+                    style={styles.input,{fontSize:20,height:100}}
                     multiline={true}
                     placeholder={`Clients will see your self introduction\nwhen they have clicked into your profile`}
                     placeholderTextColor="#aaaaaa"
@@ -397,30 +439,36 @@ locButtonStat(loc){
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+            </View>
             
         </View>
 
-        <View style={styles.container,{height:90,flexDirection:"column"}}>
+        <View style={styles.container,{flexDirection:"column"}}>
             <View style={{flexDirection:"column", alignItems: 'flex-start'}}>
               <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your contact number:`}</Text>
-              <Text style={{marginLeft: 20, fontSize:15, color: 'gray'}}>{`Only those who you have made a connection with can see your contact number:`}</Text>
+              <Text style={{marginLeft: 20, fontSize:15, color: 'gray'}}>{`Only those who you have made a connection with can\nsee your contact number:`}</Text>
             </View>
-            
+
+            <View style={{marginHorizontal:20,marginVertical:10,borderWidth:1,padding:10}}>
             <TextInput
 
-                    style={styles.input,{marginLeft:20,fontSize:20}}
-                    placeholder={`Your phone number (for communication purposes)`}
+                    style={styles.input,{fontSize:20}}
+                    placeholder={`Your phone number \n(for communication purposes)`}
                     placeholderTextColor="#aaaaaa"
                     onChangeText={(text) => this.setState({phoneNumber:text})}
                     value={this.state.phoneNumber}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
+            </View>
             
         </View>
 
+        
+        
+
         <View style={{flexDirection:"column"}}>
-          <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
+          <Text style={{marginVertical:10,marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your proof of qualification/ credentials:\n(Don't disclose sensitive information here)`}</Text>
           <View style={{flexDirection:"column"}}>
           <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:30}}>
             {this.state.credentials.map((img, index) => {
@@ -439,7 +487,7 @@ locButtonStat(loc){
                       uri: img.url,
                     }}
                   />
-                  <TouchableHighlight style={{marginLeft:30,alignSelf: 'center', borderRadius:50}}  onPress={()=>this.deleteButton(img)}>
+                  <TouchableHighlight style={{marginLeft:30,alignSelf: 'center', borderRadius:50}}  onPress={()=>this.deleteButton(img,'c')}>
                     <Image style={{alignSelf: 'center', width: 50, height: 50}} source={require('../../assets/delete.jpg')}/>
                   </TouchableHighlight>
                   
@@ -447,16 +495,114 @@ locButtonStat(loc){
               )
             })}
           </View>
-            <TouchableHighlight style={{alignSelf: 'flex-start'}} onPress={()=>this._pickImage('c')}>
+            <TouchableHighlight style={{marginLeft:30,alignSelf: 'flex-start'}} onPress={()=>this._pickImage('c')}>
               <Image 
-              style={{marginLeft:30,width: 80, height: 80}}          
+              style={{width: 80, height: 80}}          
               source={require('../../assets/addImage.png')}
               />
               </TouchableHighlight>
           </View>
-        </View>
+          <View
+            style={{
+              marginVertical:10,
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+            }}
+          />
+          </View>
         
 
+        <View style={{flexDirection:"column"}}>
+          <Text style={{marginLeft: 20, fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your Portfolio Gallery`}</Text>
+          <View style={{flexDirection:"column"}}>
+          <View style={{flexDirection:"column",alignItems:"flex-start", marginLeft:20}}>
+            {this.state.portfolioGallery.map((img, index) => {
+              
+              return (
+                <View style={{flexDirection:"row", justifyContent:"space-around"}}>
+
+                <ImageModal
+                    resizeMode="contain"
+                    imageBackgroundColor="white"
+                    style={{
+                      width: 250,
+                      height: 250,
+                    }}
+                    source={{
+                      uri: img.url,
+                    }}
+                  />
+                  <View style={{marginTop:65,alignItems:'center',flexDirection:"column"}}>
+                  <TouchableOpacity style={{marginLeft:10,marginBottom:20,width:120, height:70, borderWidth:1, borderRadius:7,backgroundColor:'#76b6fe',  justifyContent: 'center',alignItems:'center' , flexDirection:'column'}}  onPress={()=>this.setState({isDialogVisible:true,PGIndex:index})}>
+                    <Image 
+                      style={{borderRadius:80,width:35,height:35,overflow:"hidden"}}          
+                      source={require('../../assets/write.png')}
+                    />            
+                    <Text style={{alignSelf:'center',fontSize:15}}>Edit Description</Text>
+                  </TouchableOpacity>
+                    <TouchableHighlight style={{ borderRadius:50}}  onPress={()=>this.deleteButton(img,'pg')}>
+                      <Image style={{alignSelf: 'center', width: 50, height: 50}} source={require('../../assets/delete.jpg')}/>
+                    </TouchableHighlight>
+                  </View>
+
+
+                  <DialogInput isDialogVisible={this.state.isDialogVisible}
+                    title={"Edit Description"}
+                    message={"Description for portfolio gallery image #" + (parseInt(this.state.PGIndex)+1)}
+                    initValueTextInput ={this.state.portfolioGallery[this.state.PGIndex]?this.state.portfolioGallery[this.state.PGIndex].description:null}
+                    submitInput={ (inputText) => {this.state.portfolioGallery[this.state.PGIndex].description=inputText  , this.state.isDialogVisible=false, 
+                    firebase.firestore().collection("freelancers").doc(this.props.route.params.item.id).update({portfolioGallery:this.state.portfolioGallery}).then(()=>{
+                      Alert.alert(
+                  'Profile Updated',
+                  'Your Profile Has Updated',
+                  [
+                    { text: 'OK', onPress: () => {}}
+                  ],
+                  { cancelable: false }
+                  )
+                  })
+                .catch(function error(e){
+                  Alert.alert(
+                    'Some fields are empty',
+                    'Please fill in all the fields',
+                    [
+                      { text: 'OK'}
+                    ],
+                    { cancelable: false }
+                    )
+              
+              
+              
+                })
+            }}
+                    closeDialog={ () => {this.setState({isDialogVisible:false})}}>
+                  </DialogInput>
+
+
+                </View>
+              )
+            })}
+          </View>
+            <TouchableHighlight style={{marginLeft:30,alignSelf: 'flex-start'}} onPress={()=>this._pickImage('pg')}>
+              <Image 
+              style={{width: 80, height: 80}}          
+              source={require('../../assets/addImage.png')}
+              />
+              </TouchableHighlight>
+          </View>
+
+          
+        </View>
+
+ 
+        <View
+            style={{
+              marginVertical:10,
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+            }}
+          >
+          </View>
         <View  style={{marginLeft: 20,marginBottom:15,}} ><Text style={{fontSize:20, fontWeight: 'bold', color: '#788eec',}}>{`Your Work Location(s): \n(Select up to 4 choices)`}</Text></View >
         <View style={{flexDirection:"row", justifyContent:"space-around", marginBottom:10}}>
               <TouchableOpacity  style={{borderRadius: 15, justifyContent: 'center', height:30, width: '40%', backgroundColor:'white'}} ><Text style={{textAlign: 'center'}}></Text></TouchableOpacity >
@@ -512,10 +658,12 @@ locButtonStat(loc){
 
 
         
-            <View style={{alignItems:'center'}}>
+            <View style={{marginVertical:30,alignItems:'center'}}>
               <TouchableOpacity  style={{width:100,borderRadius:50,backgroundColor:'#788eec'}}  onPress={()=>this.saveOnPress()}><Text style={{alignSelf: 'center',fontSize: 25}}>Save</Text></TouchableOpacity >
             </View>
       </ScrollView>
+
+      
 
      );
 
@@ -544,7 +692,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize:20,
     height: 48,
-    width: '70%',
+    width: '90%',
     borderRadius: 5,
     overflow: 'hidden',
     backgroundColor: 'white',

@@ -8,7 +8,8 @@ import PickFreelanceToSearchPage from './pages/PickFreelanceToSearchPage'
 import PersonalProfilePage from './pages/PersonalProfilePage'
 import SearchPage from './pages/SearchPage'
 import RegistrationPage from './pages/RegistrationPage'
-import EditProfile from './pages/EditProfile/EditProfile'
+import FreelancerEditProfile from './pages/EditProfile/FreelancerEditProfile'
+import SSEditProfile from './pages/EditProfile/SSEditProfile'
 import LoginPage from './pages/LoginPage'
 import JobPage from './pages/JobPage'
 import FreelancerProfilePage from './pages/FreelancerProfilePage'
@@ -93,15 +94,16 @@ export default class App extends React.Component {
         <Stack.Screen name="LoginPage" component={LoginPage} options={{title: 'Log in',}}/>
         <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{title: 'Register',}}/>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} />
-        <Stack.Screen name="SearchPage" component={SearchPage} />
-        <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage}/>
+        <Stack.Screen name="PickFreelanceToSearchPage" component={PickFreelanceToSearchPage} options={{headerShown: false}}/>
+        <Stack.Screen name="SearchPage" component={SearchPage} options={{title: 'List of Freelancers',}}/>
+        <Stack.Screen name="FreelancerEditProfile" component={FreelancerEditProfile} options={{title: 'Edit Profile',}}/>
+        <Stack.Screen name="SSEditProfile" component={SSEditProfile}  options={{title: 'Edit Profile',}}/>
+        <Stack.Screen name="PersonalProfilePage" component={PersonalProfilePage} options={{title: 'Profile Page',}}/>
         <Stack.Screen name="FreelancerProfilePage" component={FreelancerProfilePage} options={{headerShown: false}}/>
         <Stack.Screen name="SSProfilePage" component={SSProfilePage} options={{headerShown: false}}/>
-        <Stack.Screen name="JobPage" component={JobPage} />
-        <Stack.Screen name="AddReviewPage" component={AddReviewPage} />
-        <Stack.Screen name="AddNewJobPage" component={AddNewJobPage} />
+        <Stack.Screen name="JobPage" component={JobPage} options={{title: 'Job Board',}}/>
+        <Stack.Screen name="AddReviewPage" component={AddReviewPage} options={{title: 'Add Review',}}/>
+        <Stack.Screen name="AddNewJobPage" component={AddNewJobPage} options={{title: 'Add New Job',}}/>
         
 
         </Stack.Navigator>

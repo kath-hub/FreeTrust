@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, {Component} from 'react';
 import { ScrollView,Image,TouchableHighlight, SafeAreaView, FlatList, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import EditProfile from './EditProfile/EditProfile'
 import StarRating from 'react-native-star-rating';
 import { Button, Menu, Divider, Provider } from 'react-native-paper';
 
@@ -13,11 +12,6 @@ import 'firebase/firestore';
 
 export default class PickFreelanceToSearchPage extends React.Component {
 
-    state = {
-      freelancers:[]
-    }
-
-    
 
 
     constructor(props){
@@ -25,29 +19,10 @@ export default class PickFreelanceToSearchPage extends React.Component {
     
         if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
                
-        this.subscriber  = firebase.firestore().collection("freelancers").onSnapshot(docs=>{
-                    
-          let freelancers = []
-          docs.forEach(doc => {
-            freelancers.push(doc)
-          })
-          this.setState({freelancers})
-        }
-          
-        )
-
-        
+                
       }
 
       
-
-  componentDidMount() {
-
-  }
-
-  onPress (item) {
-
-  };
 
  render() {
 
@@ -67,7 +42,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
         <Image 
         style={{height:150,width:150}}          
-        source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/emcee.png')}
+        source={require('../assets/emcee.png')}
         />
 
 
@@ -79,7 +54,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
           <Image 
           style={{height:150,width:150}}          
-          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/fitnesscoach.png')}
+          source={require('../assets/fitnesscoach.png')}
           />
         </TouchableHighlight>
 
@@ -90,7 +65,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
         <Image 
         style={{height:150,width:150}}          
-        source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/graphicdesigner.png')}
+        source={require('../assets/graphicdesigner.png')}
         />
 
 
@@ -102,7 +77,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
           <Image 
           style={{height:150,width:150}}          
-          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/magician.png')}
+          source={require('../assets/magician.png')}
           />
         </TouchableHighlight>
         
@@ -113,7 +88,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
         <Image 
         style={{height:150,width:150}}          
-        source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/makeupartist.png')}
+        source={require('../assets/makeupartist.png')}
         />
 
 
@@ -125,7 +100,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
           <Image 
           style={{height:150,width:150}}          
-          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/photographer.png')}
+          source={require('../assets/photographer.png')}
           />
         </TouchableHighlight>
         
@@ -136,7 +111,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
         <Image 
         style={{height:150,width:150}}          
-        source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/privatetutor.png')}
+        source={require('../assets/privatetutor.png')}
         />
 
 
@@ -148,7 +123,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
           <Image 
           style={{height:150,width:150}}          
-          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/translator.png')}
+          source={require('../assets/translator.png')}
           />
         </TouchableHighlight>
         
@@ -159,7 +134,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
         <Image 
         style={{height:150,width:150}}          
-        source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/videoeditor.png')}
+        source={require('../assets/videoeditor.png')}
         />
 
 
@@ -171,7 +146,7 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
           <Image 
           style={{height:150,width:150}}          
-          source={this.state.profilePicture?{uri: this.state.profilePicture,}:require('../assets/webdevelopor.png')}
+          source={require('../assets/webdevelopor.png')}
           />
         </TouchableHighlight>
         
@@ -184,59 +159,3 @@ export default class PickFreelanceToSearchPage extends React.Component {
 
  }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#788eec',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-  },
-
-  itemleft: { 
-    //flexDirection: "row",
-    //alignItems: 'center',
-    height:120,
-    width:'40%',
-    //justifyContent: "space-between",
-    backgroundColor: '#87CEFA',
-    padding: 20,
-    marginVertical: 8,
-    //marginHorizontal: 16,
-  },
-  itemright: { 
-    //flexDirection: "row",
-    alignItems: 'center',
-    //justifyContent: "space-between",
-    height:120,
-    width:'50%',
-    backgroundColor: '#87CEFA',
-    padding: 25,
-    marginVertical: 8,
-    //marginHorizontal: 16,
-  },
-  name: {
-    fontSize: 32,    
-  },
-  freelancetype: {
-    fontSize: 20,
-    fontStyle: "italic",
-    color: "#52527a"
-  },
-  selfintro: {
-    fontSize: 20,
-    //textAlign:"right"
-  },
-
-  ratingText: {
-    color: 'gray',
-    fontSize: 18,
-    marginBottom: 5,
-    paddingLeft: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0.8, height: 0.8 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5
-}
-});
