@@ -14,7 +14,6 @@ import PropTypes from 'prop-types';
 const firebase = require("firebase");
 require("firebase/firestore");
 import ApiKeys from '../constants/ApiKeys';
-import EditProfile from './EditProfile/EditProfile'
 
 import FreelanceProfileTabView from '../Components/FreelancerProfileTabView'
 import SSProfileTabView from '../Components/SSProfileTabView'
@@ -26,7 +25,16 @@ class PersonalProfile extends Component {
   }
 
   onEditPress = (item) => {
-    this.props.navigation.navigate('EditProfile',{item})
+
+    if (this.props.userType===1){
+      console.log("freelancer editprofile")
+      this.props.navigation.navigate('FreelancerEditProfile',{item})
+    }
+
+    if (this.props.userType===0){
+      console.log("ss editprofile")
+      this.props.navigation.navigate('SSEditProfile',{item})
+    }
   }
 
   renderFreelancerHeader = () => {
@@ -105,11 +113,11 @@ class PersonalProfile extends Component {
                             />
                         </View>
                 </View>
-                {/* <TouchableOpacity
+                <TouchableOpacity
                         style={styles.button}
                         onPress={() => this.onEditPress(this.props.profileData)}>
                         <Text style={styles.buttonTitle}>edit</Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                 
             </View>
         
