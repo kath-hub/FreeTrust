@@ -37,6 +37,26 @@ class PersonalProfile extends Component {
     }
   }
 
+  renderLogOut = () => {
+    return (
+      <TouchableOpacity
+      style={styles.button2}
+      onPress={() => {  firebase
+        .auth()
+        .signOut()
+        .then(
+          () => {
+            this.props.navigation.navigate("LoginPage");
+          },
+          function(error) {
+            // An error happened.
+          }
+        );}}>
+      <Text style={styles.buttonTitle}>Log Out</Text>
+      </TouchableOpacity>
+    )
+  }
+
   renderFreelancerHeader = () => {
     return (
       <View style={styles.headerContainer}>
@@ -160,7 +180,11 @@ class PersonalProfile extends Component {
     return (
         <ScrollView style={styles.scroll}>
           <View style={[styles.container, this.props.containerStyle]}>
+          <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+                {this.renderLogOut()}
+              </View>
             <View style={styles.cardContainer}>
+
               {this.renderHeaderView()}
             </View>
           </View>
@@ -392,6 +416,17 @@ button: {
   marginRight: 30,
   marginTop: 20,
   height: 20,
+  width: 40,
+  borderRadius: 5,
+  alignItems: "center",
+  justifyContent: 'center'
+},
+button2: {
+  backgroundColor: '#E1E1E1',
+  marginLeft: 30,
+  marginRight: 30,
+  marginTop: 20,
+  height: 40,
   width: 40,
   borderRadius: 5,
   alignItems: "center",

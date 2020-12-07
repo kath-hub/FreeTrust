@@ -11,7 +11,7 @@ Prequisite:
 Running the app 
 1. Open Android AVD
 2. Go to the project directory
-3.  Command: "expo start"
+3.  Command: "npm install" then "expo start"
 4. On the newly opened browser window, click " Run on Android device/ emulator"
 5. It takes awhile if you are running it for the first time, but it will ends with the login page of our app eventually. \
 6. Log in with the guest accounts below or register with your own account!. 
