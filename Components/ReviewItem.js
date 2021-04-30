@@ -20,7 +20,7 @@ const ReviewItem = ({ item }) => {
                     <View style={{flex: 0.5}}>
                         <StarRating 
                             disabled={true}
-                            rating={item.rating}
+                            rating={parseFloat(item.rating)}
                             numberOfStars={5}
                             fullStarColor='#edca79'
                             emptyStarColor='#E5E5EA'
@@ -74,36 +74,22 @@ const styles = StyleSheet.create({
     itemCreator: {
         color: 'black',
         fontSize: 18,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
         marginBottom: 5,
         fontWeight: "bold",
-        elevation: 5
     },
     itemComment: {
         color: 'black',
         fontSize: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
         marginBottom: 5,
         fontWeight: "500",
-        elevation: 5
     },
     itemLightText: {
         color: 'gray',
         fontSize: 14,
         marginBottom: 5,
         paddingLeft: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        elevation: 5
     }
 })
+
 
 export default ReviewItem
