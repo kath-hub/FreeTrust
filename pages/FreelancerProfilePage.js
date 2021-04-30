@@ -262,11 +262,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 5,
     paddingLeft: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0.8, height: 0.8 },
-    shadowOpacity: 1,
-    shadowRadius: 3,
-    elevation: 5
 },
 
 button: {
