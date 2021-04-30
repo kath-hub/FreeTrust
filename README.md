@@ -1,4 +1,11 @@
 COMP3330 Project FreeTrust (Group: 19)
+
+Video demonstration: 
+
+https://user-images.githubusercontent.com/54614141/116730817-852ba100-aa1b-11eb-93dd-cc5d7bda46f2.mp4
+
+
+
 Prequisite:
 1. Install Node.js (https://nodejs.org/en/)
     expo-cli supports following Node.js versions:
