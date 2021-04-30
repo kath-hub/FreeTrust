@@ -66,46 +66,26 @@ const styles = StyleSheet.create({
     itemCreator: {
         color: 'black',
         fontSize: 18,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
         marginBottom: 5,
         fontWeight: "bold",
-        elevation: 5
     },
     itemTitle: {
         color: '#788eec',
         fontSize: 18,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
         marginVertical: 3,
         fontWeight: "bold",
-        elevation: 5
     },
     itemComment: {
         color: 'black',
         fontSize: 15,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
         marginBottom: 5,
         fontWeight: "500",
-        elevation: 5
     },
     itemLightText: {
         color: 'gray',
         fontSize: 14,
         marginBottom: 3,
         paddingLeft: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        elevation: 5
     }
 })
 
