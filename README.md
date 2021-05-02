@@ -2,6 +2,7 @@
 COMP3330 Project FreeTrust (Group: 19)
 
 Video demonstration: 
+
 Profile Page for freelancers:
 
 <img src="https://user-images.githubusercontent.com/54614141/116808460-75bb6d80-ab6b-11eb-8141-1f477748d09b.gif" width="250">
