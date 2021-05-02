@@ -1,17 +1,15 @@
 
-COMP3330 Project FreeTrust (Group: 19)
-
-Video demonstration: 
-
-Profile Page for freelancers:
+<h1>COMP3330 Project FreeTrust (Group: 19)</h1>
+<h2>Demonstration</h2>
+<h3>Profile Page for freelancers:</h3>
 
 <img src="https://user-images.githubusercontent.com/54614141/116808460-75bb6d80-ab6b-11eb-8141-1f477748d09b.gif" width="250">
 
-Job board for service seekers: 
+<h3>Job board for service seekers: </h3>
 
 <img src="https://user-images.githubusercontent.com/54614141/116807912-6edf2b80-ab68-11eb-84e7-17ab03cab95a.gif" width="250">
 
-Adding a job:
+<h3>Adding a job:</h3>
 
 <img src="https://user-images.githubusercontent.com/54614141/116808046-47d52980-ab69-11eb-9be8-325e751dd89f.gif" width="250"> 
 
