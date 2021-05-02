@@ -4,8 +4,12 @@ COMP3330 Project FreeTrust (Group: 19)
 Video demonstration: 
 
 
+Job board for service seekers: 
 
 <img src="https://user-images.githubusercontent.com/54614141/116807912-6edf2b80-ab68-11eb-84e7-17ab03cab95a.gif" width="250">
+
+Adding a job: 
+<img src="https://user-images.githubusercontent.com/54614141/116808046-47d52980-ab69-11eb-9be8-325e751dd89f.gif" width="250"> 
 
 
 
