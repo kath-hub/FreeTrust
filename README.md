@@ -1,5 +1,3 @@
-
-
 COMP3330 Project FreeTrust (Group: 19)
 
 Video demonstration: 
@@ -9,6 +7,7 @@ https://user-images.githubusercontent.com/54614141/116807757-78b45f00-ab67-11eb-
 
 
 
+https://user-images.githubusercontent.com/54614141/116807797-bc0ecd80-ab67-11eb-9468-7b50af92dd1d.mov
 
 
 Prequisite:
