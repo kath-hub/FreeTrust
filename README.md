@@ -5,6 +5,10 @@
 
 <img src="https://user-images.githubusercontent.com/54614141/116808460-75bb6d80-ab6b-11eb-8141-1f477748d09b.gif" width="250">
 
+<h3>Profile Page for service seekers:</h3>
+
+<img src="https://user-images.githubusercontent.com/54614141/116808688-d008fe00-ab6c-11eb-9154-c88283875973.gif" width="250">
+
 <h3>Job board for service seekers: </h3>
 
 <img src="https://user-images.githubusercontent.com/54614141/116807912-6edf2b80-ab68-11eb-84e7-17ab03cab95a.gif" width="250">
