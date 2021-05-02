@@ -3,11 +3,10 @@ COMP3330 Project FreeTrust (Group: 19)
 Video demonstration: 
 
 
-https://user-images.githubusercontent.com/54614141/116807757-78b45f00-ab67-11eb-934d-e5c01658544f.mp4
+
+https://user-images.githubusercontent.com/54614141/116807819-e6f92180-ab67-11eb-9d8e-30b6dac98194.mov
 
 
-
-https://user-images.githubusercontent.com/54614141/116807797-bc0ecd80-ab67-11eb-9468-7b50af92dd1d.mov
 
 
 Prequisite:
